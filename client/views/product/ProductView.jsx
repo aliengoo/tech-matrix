@@ -3,11 +3,14 @@ import React, {Component, PropTypes} from 'react';
 import ProductStore from './ProductStore';
 import ProductActions from './ProductActions';
 
-@connectToStores
+import Name from '../_components/Name.jsx';
+
 class ProductView extends Component {
 
-  constructor() {
+  constructor(props) {
+    super(props);
     this.renderProduct = this.renderProduct.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   static getStores() {
@@ -19,7 +22,16 @@ class ProductView extends Component {
   }
 
   componentDidMount() {
-    ProductActions.fetchProduct(1);
+    const {params} = this.props;
+
+    if (params && params.id) {
+      ProductActions.fetchProduct(params.id);
+    }
+  }
+
+  onChange(prop, target) {
+    ProductActions.setProductField(prop, target.value);
+    ProductActions.validateProductForm(target);
   }
 
   render() {
@@ -46,12 +58,11 @@ class ProductView extends Component {
   renderProduct() {
     const {product} = this.props;
     return (
-      <dl>
-        <dt>Name</dt>
-        <dd>{product.name}</dd>
-      </dl>
+      <form name="productForm">
+        <Name value={product.name} onChange={(target) => this.onChange('name', target)}/>
+      </form>
     );
   }
 }
 
-export default ProductView;
+export default connectToStores(ProductView);

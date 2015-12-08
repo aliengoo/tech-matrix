@@ -1,4 +1,8 @@
 "use strict";
+global.jQuery = require('jquery');
+global.$ = global.jQuery;
+require('bootstrap');
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 

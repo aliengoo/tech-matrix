@@ -28,6 +28,9 @@ gulp.task("build:js", function (done) {
 
 
 gulp.task('default', ['build:js'], function () {
+  lp.livereload({
+    start: true
+  });
   gulp.watch('./client/**', ["build:js"]);
 });
 

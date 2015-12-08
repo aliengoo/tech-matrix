@@ -1,28 +1,34 @@
 import alt from '../../alt';
 import axios from 'axios';
+import _ from 'lodash';
 
 class ProductActions {
 
-  fetchProductComplete(product) {
-    this.dispatch({
-      product
-    });
+  validateProductForm(changedElement) {
+    changedElement.checkValidity();
+    this.dispatch(changedElement);
   }
 
-  fetchProductFailed(error) {
-    this.dispatch({
-      error
-    });
+  setProductField(prop, value) {
+    this.dispatch({prop, value});
+  }
+
+  fetchProductComplete(response) {
+    this.dispatch(response.data);
+  }
+
+  fetchProductFailed(response) {
+    this.dispatch(response.data);
   }
 
   fetchProduct(id) {
 
     this.dispatch();
 
-    axios.get(`/api/product/${id}`).then((product) => {
-      this.actions.fetchProductComplete(product);
-    }).catch((error) => {
-      this.actions.fetchProductFailed(error);
+    axios.get(`/api/product/${id}`).then((response) => {
+      this.actions.fetchProductComplete(response);
+    }).catch((response) => {
+      this.actions.fetchProductFailed(response);
     });
 
   }

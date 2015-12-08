@@ -1,3 +1,5 @@
+"use strict";
+
 let router = require('express').Router();
 
 router.get('/api/product/:id', (req, res) => {
