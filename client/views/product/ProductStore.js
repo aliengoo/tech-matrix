@@ -4,7 +4,7 @@ import ProductActions from './ProductActions';
 class ProductStore {
   constructor() {
     this.bindListeners({
-      onValidateProductForm: ProductActions.validateProductForm,
+      onFormStateUpdated: ProductActions.formStateUpdated,
       onSetProductField: ProductActions.setProductField,
       onFetchProduct: ProductActions.fetchProduct,
       onFetchProductComplete: ProductActions.fetchProductComplete,
@@ -19,20 +19,13 @@ class ProductStore {
     };
   }
 
-  onValidateProductForm(element) {
-    const formState = Object.assign({}, this.state.formState, {
-      [element.name]:  element.validity
-    });
-
+  onFormStateUpdated(formState) {
     const newState = Object.assign({}, this.state, {formState});
-
-    console.log(newState);
-
     this.setState(newState);
   }
 
   onSetProductField(field) {
-    var product = Object.assign({}, this.state.product, {[field.prop]: field.value});
+    var product = Object.assign({}, this.state.product, {[field.name]: field.value});
     var newState = Object.assign({}, this.state, {product});
     this.setState(newState);
   }

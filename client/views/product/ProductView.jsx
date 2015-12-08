@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import ProductStore from './ProductStore';
 import ProductActions from './ProductActions';
 
+import Form from '../_components/Form.jsx'
 import Name from '../_components/Name.jsx';
 
 class ProductView extends Component {
@@ -29,9 +30,8 @@ class ProductView extends Component {
     }
   }
 
-  onChange(prop, target) {
-    ProductActions.setProductField(prop, target.value);
-    ProductActions.validateProductForm(target);
+  onChange(field) {
+    ProductActions.setProductField(field);
   }
 
   render() {
@@ -58,9 +58,9 @@ class ProductView extends Component {
   renderProduct() {
     const {product} = this.props;
     return (
-      <form name="productForm">
-        <Name value={product.name} onChange={(target) => this.onChange('name', target)}/>
-      </form>
+      <Form name="productForm" onFormStateUpdated={ProductActions.formStateUpdated}>
+        <Name value={product.name} onChange={this.onChange}/>
+      </Form>
     );
   }
 }

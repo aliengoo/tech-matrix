@@ -4,13 +4,12 @@ import _ from 'lodash';
 
 class ProductActions {
 
-  validateProductForm(changedElement) {
-    changedElement.checkValidity();
-    this.dispatch(changedElement);
+  formStateUpdated(formState) {
+    this.dispatch(formState);
   }
 
-  setProductField(prop, value) {
-    this.dispatch({prop, value});
+  setProductField(field) {
+    this.dispatch(field);
   }
 
   fetchProductComplete(response) {

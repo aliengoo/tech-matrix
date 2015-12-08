@@ -12,7 +12,9 @@ export default class Name extends Component {
 
     this.observable = Rx.Observable.fromEvent(document.querySelector("#name"), "keyup")
       .debounce(debounce || 500)
-      .subscribe(ev => onChange(ev.target));
+      .map(ev => ev.target)
+      .filter(element => !!element.name)
+      .subscribe(element => onChange(element.name, element.value));
   }
 
   componentWillUnmount() {
@@ -25,7 +27,13 @@ export default class Name extends Component {
     return (
       <div className="form-group">
         <Label htmlFor="name">Name</Label>
-        <input type="text" className="form-control" defaultValue={value} id="name" name="name" required={true}/>
+        <input
+          type="text"
+          className="form-control"
+          defaultValue={value}
+          id="name"
+          name="name"
+          required={true}/>
       </div>
     );
   }
