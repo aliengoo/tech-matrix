@@ -4,13 +4,15 @@ import ProductStore from './ProductStore';
 import ProductActions from './ProductActions';
 
 import Form from '../_components/Form.jsx'
-import Name from '../_components/Name.jsx';
+import ProductName from './_components/ProductName.jsx';
+import ProductBusinessOwner from './_components/ProductBusinessOwner.jsx';
+import ProductDependencies from './_components/ProductDependencies.jsx';
+import ProductSupportNotes from './_components/ProductSupportNotes.jsx';
 
 class ProductView extends Component {
 
   constructor(props) {
     super(props);
-    this.renderProduct = this.renderProduct.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -25,6 +27,9 @@ class ProductView extends Component {
   componentDidMount() {
     const {params} = this.props;
 
+    ProductActions.fetchPeople();
+    ProductActions.fetchProductNames();
+
     if (params && params.id) {
       ProductActions.fetchProduct(params.id);
     }
@@ -36,11 +41,7 @@ class ProductView extends Component {
 
   render() {
 
-    let product = (<div>No product</div>);
-
-    if (this.props.product) {
-      product = this.renderProduct();
-    }
+    const {fetching, error, product, people, productNames} = this.props;
 
     return (
       <div className="container">
@@ -48,20 +49,41 @@ class ProductView extends Component {
           <h1>Product</h1>
         </header>
 
+
         <div className="col-lg-12">
-          {product}
+          <Form name="productForm" onFormStateUpdated={ProductActions.formStateUpdated}>
+            <div className="col-lg-6">
+
+              <ProductName
+                fetching={fetching}
+                value={product.name}
+                onChange={value => this.onChange({'name': value})}/>
+
+              <ProductDependencies
+                fetching={fetching}
+                value={product.dependencies}
+                productNames={productNames}
+                onChange={value => this.onChange({'dependencies': value})}/>
+
+              <ProductBusinessOwner
+                fetching={fetching}
+                value={product.businessOwners}
+                people={people}
+                onChange={value => this.onChange({'businessOwners': value})}/>
+            </div>
+
+            <div className="col-lg-6">
+              <ProductSupportNotes
+                value={product.supportNotes}
+                fetching={fetching}
+                onChange={value => this.onChange({'supportNotes': value})}/>
+            </div>
+
+          </Form>
         </div>
       </div>
     );
-  }
 
-  renderProduct() {
-    const {product} = this.props;
-    return (
-      <Form name="productForm" onFormStateUpdated={ProductActions.formStateUpdated}>
-        <Name value={product.name} onChange={this.onChange}/>
-      </Form>
-    );
   }
 }
 

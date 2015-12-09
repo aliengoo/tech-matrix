@@ -64,7 +64,7 @@ export default class Form extends Component {
       }
 
       return React.cloneElement(child, {
-        formState: self.formState[child.type.name]
+        validityState: self.formState[child.type.name]
       });
     });
   }

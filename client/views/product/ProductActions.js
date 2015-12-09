@@ -29,8 +29,43 @@ class ProductActions {
     }).catch((response) => {
       this.actions.fetchProductFailed(response);
     });
-
   }
+
+  fetchPeopleComplete(response) {
+    this.dispatch(response.data);
+  }
+
+  fetchPeopleFailed(response) {
+    this.dispatch(response.data);
+  }
+
+  fetchPeople() {
+    this.dispatch();
+
+    axios.get('/api/people').then((response) => {
+      this.actions.fetchPeopleComplete(response);
+    }).catch((response) => {
+      this.actions.fetchPeopleFailed(response);
+    });
+  }
+
+  fetchProductNamesComplete(response) {
+    this.dispatch(response.data);
+  }
+
+  fetchProductNamesFailed(response) {
+    this.dispatch(response.data);
+  }
+
+  fetchProductNames() {
+    this.dispatch();
+    axios.get('/api/product/meta/names').then((response) => {
+      this.actions.fetchProductNamesComplete(response);
+    }).catch((response) => {
+      this.actions.fetchProductNamesFailed(response);
+    });
+  }
+
 }
 
 export default alt.createActions(ProductActions);

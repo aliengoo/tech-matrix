@@ -8,6 +8,16 @@ var watchify = require('watchify');
 var path = require('path');
 var source = require('vinyl-source-stream');
 
+gulp.task('vendor:css', function () {
+  var src = [
+    'node_modules/react-select/dist/react-select.css'
+  ];
+
+  return gulp.src(src)
+    .pipe(lp.concat('app.css'))
+    .pipe(gulp.dest("public"));
+});
+
 
 gulp.task("build:js", function (done) {
   var args = watchify.args;
@@ -27,7 +37,7 @@ gulp.task("build:js", function (done) {
 });
 
 
-gulp.task('default', ['build:js'], function () {
+gulp.task('default', ['vendor:css', 'build:js'], function () {
   lp.livereload({
     start: true
   });

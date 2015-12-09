@@ -8,11 +8,19 @@ class ProductStore {
       onSetProductField: ProductActions.setProductField,
       onFetchProduct: ProductActions.fetchProduct,
       onFetchProductComplete: ProductActions.fetchProductComplete,
-      onFetchProductFailed: ProductActions.fetchProductFailed
+      onFetchProductFailed: ProductActions.fetchProductFailed,
+      onFetchPeople: ProductActions.fetchPeople,
+      onFetchPeopleComplete: ProductActions.fetchPeopleComplete,
+      onFetchPeopleFailed: ProductActions.fetchPeopleFailed,
+      onFetchProductNames: ProductActions.fetchProductNames,
+      onFetchProductNamesComplete: ProductActions.fetchProductNamesComplete,
+      onFetchProductNamesFailed: ProductActions.fetchProductNamesFailed
     });
 
     this.state = {
-      product: null,
+      product: {},
+      people: [],
+      productNames: [],
       error: null,
       fetching: false,
       formState: null
@@ -25,7 +33,7 @@ class ProductStore {
   }
 
   onSetProductField(field) {
-    var product = Object.assign({}, this.state.product, {[field.name]: field.value});
+    var product = Object.assign({}, this.state.product, field);
     var newState = Object.assign({}, this.state, {product});
     this.setState(newState);
   }
@@ -50,6 +58,57 @@ class ProductStore {
       error,
       product: null
     });
+  }
+
+  onFetchPeople() {
+    this.setState({
+      fetching: true,
+      error: null,
+      people: []
+    });
+  }
+
+  onFetchPeopleComplete(people) {
+    this.setState({
+      fetching: false,
+      error: null,
+      people
+    });
+  }
+
+  onFetchPeopleFailed(error) {
+    this.setState({
+      fetching: false,
+      error,
+      people: []
+    });
+  }
+  onFetchProductNames() {
+    var newState = Object.assign({}, this.state, {
+      fetching: true,
+      error: null
+    });
+
+    this.setState(newState);
+  }
+
+  onFetchProductNamesComplete(productNames) {
+    var newState = Object.assign({}, this.state, {
+      fetching: false,
+      error: null,
+      productNames
+    });
+
+    this.setState(newState);
+  }
+
+  onFetchProductNamesFailed(error) {
+    var newState = Object.assign({}, this.state, {
+      fetching: false,
+      error
+    });
+
+    this.setState(newState);
   }
 }
 
