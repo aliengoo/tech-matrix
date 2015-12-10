@@ -1,3 +1,5 @@
-/**
- * Created by gbunter on 09/12/2015.
- */
+"use strict";
+let Vendor = require('../db/models/Vendor');
+let modelRouter = require('./modelRouter')(Vendor, "vendor");
+
+module.exports = modelRouter;

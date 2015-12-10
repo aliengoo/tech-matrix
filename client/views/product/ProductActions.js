@@ -1,6 +1,10 @@
 import alt from '../../alt';
 import axios from 'axios';
 import _ from 'lodash';
+import ModelApi from '../../api/ModelApi';
+
+const productApi = new ModelApi("product");
+const peopleApi = new ModelApi("people");
 
 class ProductActions {
 
@@ -17,18 +21,15 @@ class ProductActions {
   }
 
   fetchProductFailed(response) {
-    this.dispatch(response.data);
+    this.dispatch(response);
   }
 
   fetchProduct(id) {
-
     this.dispatch();
 
-    axios.get(`/api/product/${id}`).then((response) => {
-      this.actions.fetchProductComplete(response);
-    }).catch((response) => {
-      this.actions.fetchProductFailed(response);
-    });
+    productApi.get(id)
+      .then(this.actions.fetchProductComplete)
+      .catch(this.actions.fetchProductFailed);
   }
 
   fetchPeopleComplete(response) {
@@ -36,17 +37,15 @@ class ProductActions {
   }
 
   fetchPeopleFailed(response) {
-    this.dispatch(response.data);
+    this.dispatch(response);
   }
 
   fetchPeople() {
     this.dispatch();
 
-    axios.get('/api/people').then((response) => {
-      this.actions.fetchPeopleComplete(response);
-    }).catch((response) => {
-      this.actions.fetchPeopleFailed(response);
-    });
+    peopleApi.getNames()
+      .then(this.actions.fetchPeopleComplete)
+      .catch(this.actions.fetchPeopleFailed);
   }
 
   fetchProductNamesComplete(response) {
@@ -59,13 +58,11 @@ class ProductActions {
 
   fetchProductNames() {
     this.dispatch();
-    axios.get('/api/product/meta/names').then((response) => {
-      this.actions.fetchProductNamesComplete(response);
-    }).catch((response) => {
-      this.actions.fetchProductNamesFailed(response);
-    });
-  }
 
+    productApi.getNames()
+      .then(this.actions.fetchProductNamesComplete)
+      .catch(this.actions.fetchProductNamesFailed);
+  }
 }
 
 export default alt.createActions(ProductActions);

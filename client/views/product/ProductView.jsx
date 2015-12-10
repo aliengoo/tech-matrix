@@ -9,6 +9,8 @@ import ProductBusinessOwners from './_components/ProductBusinessOwners.jsx';
 import ProductTechnologyOwners from './_components/ProductTechnologyOwners.jsx';
 import ProductRelatedProducts from './_components/ProductRelatedProducts.jsx';
 import ProductNotes from './_components/ProductNotes.jsx';
+import ProductMaintenanceEndDate from './_components/ProductMaintenanceEndDate.jsx';
+import ProductMaintenanceNotes from './_components/ProductMaintenanceNotes.jsx';
 import ProductSupportEndDate from './_components/ProductSupportEndDate.jsx';
 import ProductSupportNotes from './_components/ProductSupportNotes.jsx';
 
@@ -64,20 +66,20 @@ class ProductView extends Component {
 
               <ProductRelatedProducts
                 fetching={fetching}
-                value={product.dependencies}
-                productNames={productNames}
-                onChange={value => this.onChange({'dependencies': value})}/>
+                value={product.relatedProducts}
+                options={productNames}
+                onChange={value => this.onChange({'relatedProducts': value})}/>
 
               <ProductTechnologyOwners
                 fetching={fetching}
                 value={product.technologyOwners}
-                people={people}
+                options={people}
                 onChange={value => this.onChange({'technologyOwners': value})}/>
 
               <ProductBusinessOwners
                 fetching={fetching}
                 value={product.businessOwners}
-                people={people}
+                options={people}
                 onChange={value => this.onChange({'businessOwners': value})}/>
 
               <ProductNotes
@@ -87,6 +89,17 @@ class ProductView extends Component {
             </div>
 
             <div className="col-lg-6">
+              <ProductMaintenanceEndDate
+                value={product.maintenanceEndDate}
+                fetching={fetching}
+                onChange={value => this.onChange({'maintenanceEndDate': value})}
+              />
+
+              <ProductMaintenanceNotes
+                value={product.maintenanceNotes}
+                fetching={fetching}
+                onChange={value => this.onChange({'maintenanceNotes': value})}/>
+
               <ProductSupportEndDate
                 value={product.supportEndDate}
                 fetching={fetching}

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Q = require('q');
 var promisePlugin = require('./promisePlugin');
+var nameListPlugin = require('./namesListPlugin');
 
 var productSchema = new Schema({
   name: {
@@ -72,19 +72,7 @@ productSchema.index({
   }
 });
 
-productSchema.statics.$getNames = function() {
-  var defer = Q.defer();
-  this.find().sort({name: 1}).select('name').exec((err, results) => {
-    if (err) {
-      defer.reject(err);
-    } else {
-      defer.resolve(results);
-    }
-  });
-
-  return defer.promise;
-};
-
 productSchema.plugin(promisePlugin);
+productSchema.plugin(nameListPlugin);
 
 module.exports = mongoose.model('Product', productSchema);

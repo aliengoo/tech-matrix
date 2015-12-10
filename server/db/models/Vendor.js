@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var model = mongoose.model;
+var promisePlugin = require('./promisePlugin');
+var nameListPlugin = require('./namesListPlugin');
 
 var vendorSchema = new Schema({
   name: {
@@ -13,4 +14,7 @@ var vendorSchema = new Schema({
   }
 });
 
-module.exports = model('Vendor', vendorSchema);
+vendorSchema.plugin(promisePlugin);
+vendorSchema.plugin(nameListPlugin);
+
+module.exports = mongoose.model('Vendor', vendorSchema);

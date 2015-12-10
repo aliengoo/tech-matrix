@@ -18,6 +18,7 @@ app.set('view engine', 'jade');
 // API
 app.use(require('./routes/hello-world'));
 app.use(require('./routes/product'));
+app.use(require('./routes/vendor'));
 app.use(require('./routes/people'));
 
 app.get('/', (req, res) => {

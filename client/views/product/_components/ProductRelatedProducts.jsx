@@ -17,15 +17,7 @@ export default class ProductRelatedProducts extends Component {
   }
 
   render() {
-    const {fetching, value, productNames, validityState} = this.props;
-
-    var options = [];
-
-    _.forEach(productNames, (product) => {
-      options.push({
-        value: product, label: product
-      });
-    });
+    const {fetching, value, options, validityState} = this.props;
 
     const selectValue = value.join(",");
 
@@ -46,13 +38,13 @@ export default class ProductRelatedProducts extends Component {
 }
 
 ProductRelatedProducts.defaultProps = {
-  productNames: [],
+  options: [],
   value: []
 };
 
 ProductRelatedProducts.propTypes = {
   fetching: PropTypes.bool,
-  productNames: PropTypes.array,
+  options: PropTypes.array,
   value: PropTypes.array,
   onChange: PropTypes.func.isRequired
 };

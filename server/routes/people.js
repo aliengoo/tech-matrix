@@ -1,13 +1,5 @@
-var router = require('express').Router();
+"use strict";
+let Vendor = require('../db/models/Person');
+let modelRouter = require('./modelRouter')(Vendor, "people");
 
-router.get('/api/people', (req, res) => {
-  res.send([
-    'homer',
-    'marge',
-    'bart',
-    'lisa',
-    'maggie'
-  ]);
-});
-
-module.exports = router;
+module.exports = modelRouter;

@@ -16,16 +16,12 @@ export default class ProductTechnologyOwners extends Component {
     this.props.onChange(rawValues.split(','));
   }
 
+  newPersonCreator(newOption) {
+    console.log("newOption:", newOption);
+  }
+
   render() {
-    const {fetching, value, people, validityState} = this.props;
-
-    var options = [];
-
-    _.forEach(people, (person) => {
-      options.push({
-        value: person, label: person
-      });
-    });
+    const {fetching, value, options, validityState} = this.props;
 
     const selectValue = value.join(",");
 
@@ -45,13 +41,13 @@ export default class ProductTechnologyOwners extends Component {
 }
 
 ProductTechnologyOwners.defaultProps = {
-  people: [],
+  options: [],
   value: []
 };
 
 ProductTechnologyOwners.propTypes = {
   fetching: PropTypes.bool,
-  people: PropTypes.array,
+  options: PropTypes.array,
   value: PropTypes.array,
   onChange: PropTypes.func.isRequired
 };
