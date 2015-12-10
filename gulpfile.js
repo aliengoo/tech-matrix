@@ -14,10 +14,37 @@ gulp.task('vendor:css', function () {
   ];
 
   return gulp.src(src)
-    .pipe(lp.concat('app.css'))
+    .pipe(lp.concat('vendor.css'))
     .pipe(gulp.dest("public"));
 });
 
+gulp.task('build:css', function () {
+
+  // pipe the target file to the
+  var mainFile = ["client/app.scss"];
+  var imports = [
+    "!" + mainFile[0],
+    'client/**/*.scss'
+  ];
+
+  return gulp.src(mainFile)
+    .pipe(lp.inject(gulp.src(imports, {read: false}), {
+      relative: true,
+      starttag: '/* inject:imports */',
+      endtag: '/* endinject */',
+      transform: function (filePath) {
+        return '@import "' + filePath + '";';
+      }
+    }))
+    .pipe(lp.sass())
+    .pipe(lp.autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
+    .pipe(lp.minifyCss())
+    .pipe(gulp.dest("public"))
+    .pipe(lp.livereload());
+});
 
 gulp.task("build:js", function (done) {
   var args = watchify.args;
@@ -37,10 +64,11 @@ gulp.task("build:js", function (done) {
 });
 
 
-gulp.task('default', ['vendor:css', 'build:js'], function () {
+gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   lp.livereload({
     start: true
   });
-  gulp.watch('./client/**', ["build:js"]);
+  gulp.watch(['client/**/*.js', 'client/**/*.jsx'], ["build:js"]);
+  gulp.watch('client/**/*.css', ["build:css"]);
 });
 

@@ -5,7 +5,7 @@ import FormGroup from '../../_components/FormGroup.jsx';
 import Label from '../../_components/Label.jsx';
 import Select from 'react-select';
 
-export default class ProductBusinessOwner extends Component {
+export default class ProductBusinessOwners extends Component {
 
   constructor(props) {
     super(props);
@@ -17,13 +17,13 @@ export default class ProductBusinessOwner extends Component {
   }
 
   render() {
-    const {fetching, value, people, validityState} = this.props;
+    const {fetching, value, tags, validityState} = this.props;
 
     var options = [];
 
-    _.forEach(people, (person) => {
+    _.forEach(tags, (tag) => {
       options.push({
-        value: person, label: person
+        value: tag._id, label: tag.name
       });
     });
 
@@ -31,7 +31,7 @@ export default class ProductBusinessOwner extends Component {
 
     return (
       <FormGroup>
-        <Label>Business owners</Label>
+        <Label>Tags</Label>
         <Select
           multi={true}
           value={selectValue}
@@ -44,14 +44,14 @@ export default class ProductBusinessOwner extends Component {
   }
 }
 
-ProductBusinessOwner.defaultProps = {
-  people: [],
+ProductBusinessOwners.defaultProps = {
+  tags: [],
   value: []
 };
 
-ProductBusinessOwner.propTypes = {
+ProductBusinessOwners.propTypes = {
   fetching: PropTypes.bool,
-  people: PropTypes.array,
+  tags: PropTypes.array,
   value: PropTypes.array,
   onChange: PropTypes.func.isRequired
 };

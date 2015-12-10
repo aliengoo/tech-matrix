@@ -5,7 +5,7 @@ import FormGroup from '../../_components/FormGroup.jsx';
 import Label from '../../_components/Label.jsx';
 import Select from 'react-select';
 
-export default class ProductDependencies extends Component {
+export default class ProductRelatedProducts extends Component {
 
   constructor(props) {
     super(props);
@@ -31,8 +31,9 @@ export default class ProductDependencies extends Component {
 
     return (
       <FormGroup>
-        <Label>Dependencies</Label>
+        <Label>Related products</Label>
         <Select
+          placeholder="e.g. Windows 2008"
           multi={true}
           value={selectValue}
           delimiter={","}
@@ -44,12 +45,12 @@ export default class ProductDependencies extends Component {
   }
 }
 
-ProductDependencies.defaultProps = {
+ProductRelatedProducts.defaultProps = {
   productNames: [],
   value: []
 };
 
-ProductDependencies.propTypes = {
+ProductRelatedProducts.propTypes = {
   fetching: PropTypes.bool,
   productNames: PropTypes.array,
   value: PropTypes.array,
