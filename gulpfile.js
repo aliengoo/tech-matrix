@@ -84,6 +84,7 @@ gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
 
   lp.nodemon({
     delay: 0,
+    debug: true,
     harmony: true,
     script: './server/index.js',
     stdout: false,

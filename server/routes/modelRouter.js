@@ -2,7 +2,9 @@ var express = require('express');
 
 function errorHandlerFn(res) {
   return function (err) {
-    res.status(500).send(err);
+    res.status(500).json({
+      err
+    });
   }
 }
 
@@ -17,7 +19,7 @@ function modelRouter(Model, modelName) {
   router.post(modelPath, (req, res) => {
     var model = new Model(req.body);
     model.$save().then(
-      () => res.send(model),
+      () => res.json(model),
       errorHandlerFn(res));
   });
 
@@ -28,7 +30,7 @@ function modelRouter(Model, modelName) {
         if (model) {
           res.send(model);
         } else {
-          res.status(404).send({
+          res.status(404).json({
             message: `${modelPath}/${req.params.id} not found`
           });
         }
@@ -38,27 +40,35 @@ function modelRouter(Model, modelName) {
 
   // paged query
   router.post(`${modelPath}/paged-query`, (req, res) => {
-    Model.$pagedQuery(res.body.page, res.body.query).then(
-      (results) => res.send(results),
+    Model.$pagedQuery(req.body.page, req.body.query).then(
+      (results) => res.json(results),
+      errorHandlerFn(res));
+  });
+
+  router.post(`${modelPath}/text-search`, (req, res) => {
+
+    console.log(req.body);
+    Model.$textSearch(req.body.query).then(
+      (results) => res.json(results),
       errorHandlerFn(res));
   });
 
   // update
   router.put(modelPath, (req, res) => {
     Model.$findOneAndUpdate(req.body).then(
-      (model) => res.send(model),
+      (model) => res.json(model),
       errorHandlerFn(res));
   });
 
   router.delete(`${modelPath}/:id`, (req, res) => {
     Model.$findByIdAndRemove(req.params.id).then(
-      () => res.send({ok: true}),
+      () => res.json({ok: true}),
       errorHandlerFn(res));
   });
 
   router.get(`${modelPath}/meta/names`, (req, res) => {
     Model.$getNames().then(
-      (names) => res.send(names),
+      (names) => res.json(names),
       errorHandlerFn(res));
   });
 

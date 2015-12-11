@@ -1,7 +1,7 @@
 "use strict";
 
 var Q = require('q');
-var calculate = require('../pagination');
+var calculate = require('../pagination').calculate;
 
 module.exports = exports = function promisePlugin(schema) {
   schema.statics.$findById = function(id) {
@@ -9,8 +9,9 @@ module.exports = exports = function promisePlugin(schema) {
   };
 
   schema.statics.$pagedQuery = function(page, query) {
-    function runPagedQuery(count) {
-      var defer = Q.defer();
+    var defer = Q.defer();
+
+    this.$count(query).then((count) => {
       calculate(page, count);
 
       this.find(query).skip(page.skip).limit(page.limit).exec((err, results) => {
@@ -20,11 +21,9 @@ module.exports = exports = function promisePlugin(schema) {
           defer.resolve(results);
         }
       });
+    });
 
-      return defer.promise;
-    }
-
-    return this.$count(query).then(runPagedQuery.bind(this));
+    return defer.promise;
   };
 
   schema.statics.$count = function(query) {

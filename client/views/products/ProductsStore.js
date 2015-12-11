@@ -18,11 +18,7 @@ class ProductsStore {
       vendorNames: [],
       error: null,
       fetching: false,
-      filter: {
-        $text: {
-          $search: ""
-        }
-      }
+      filter: ""
     };
   }
 
@@ -73,18 +69,16 @@ class ProductsStore {
     });
   }
 
-  onFilterProductsComplete(result) {
+  onFilterProductsComplete(results) {
     this.setState({
       fetching: false,
-      page: result.page,
-      products: result.results
+      products: results
     });
   }
 
   onFilterProductsFailed(error) {
     this.setState({
       fetching: false,
-      products: [],
       error
     });
   }

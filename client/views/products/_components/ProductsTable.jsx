@@ -18,10 +18,10 @@ export default class ProductsTable extends Component {
     if (fetching) {
       content = this.renderFetching();
     } else {
-      if (products.length === 0) {
+      if (products && products.length === 0) {
         content = this.renderNoProducts();
       } else {
-        content = this.renderProducts();
+        content = this.renderProducts(products);
       }
     }
 
@@ -36,6 +36,7 @@ export default class ProductsTable extends Component {
   }
 
   renderProducts(products) {
+
     return (
       <table className="table table-hover">
         <thead>

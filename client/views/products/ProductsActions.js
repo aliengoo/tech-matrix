@@ -21,7 +21,7 @@ class ProductsActions {
     this.dispatch();
     peopleApi.getNames()
       .then(this.actions.fetchPeopleNamesComplete)
-      .catch(this.action.fetchPeopleNamesFailed);
+      .catch(this.actions.fetchPeopleNamesFailed);
   }
 
   fetchVendorNamesComplete(response) {
@@ -48,10 +48,10 @@ class ProductsActions {
     this.dispatch(response.data);
   }
 
-  filterProducts(page, query) {
+  filterProducts(filter) {
     this.dispatch();
 
-    productApi.pagedQuery(page, query)
+    productApi.textSearch(filter)
       .then(this.actions.filterProductsComplete)
       .catch(this.actions.filterProductsFailed);
   }

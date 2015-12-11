@@ -54,4 +54,8 @@ export default class ModelApi {
   pagedQuery(page, query) {
     return axios.post(`${this.baseUrl}/paged-query`, {page, query});
   }
+
+  textSearch(query) {
+    return axios.post(`${this.baseUrl}/text-search`, {query});
+  }
 }

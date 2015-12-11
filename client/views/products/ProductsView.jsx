@@ -7,6 +7,11 @@ import ProductsActions from './ProductsActions';
 
 class ProductsView extends Component {
 
+  constructor(props) {
+    super(props);
+    this.onSearch = this.onSearch.bind(this);
+  }
+
   static getStores() {
     return [ProductsStore];
   }
@@ -18,11 +23,16 @@ class ProductsView extends Component {
   componentDidMount() {
     ProductsActions.fetchPeopleNames();
     ProductsActions.fetchVendorNames();
+    ProductsActions.filterProducts("");
+  }
 
-
+  onSearch(filter) {
+    ProductsActions.filterProducts(filter);
   }
 
   render() {
+    const {fetching, products} = this.props;
+
     return (
       <div className="container-fluid">
         <div className="col-lg-12">
@@ -30,10 +40,10 @@ class ProductsView extends Component {
             <h1>Products</h1>
           </header>
           <div className="row">
-            <ProductsFilter/>
+            <ProductsFilter onSearch={this.onSearch} fetching={fetching}/>
           </div>
           <div className="row">
-            <ProductsTable/>
+            <ProductsTable fetching={fetching} products={products}/>
           </div>
         </div>
       </div>
