@@ -3,19 +3,7 @@ import ProductActions from './ProductActions';
 
 class ProductStore {
   constructor() {
-    this.bindListeners({
-      onFormStateUpdated: ProductActions.formStateUpdated,
-      onSetProductField: ProductActions.setProductField,
-      onFetchProduct: ProductActions.fetchProduct,
-      onFetchProductComplete: ProductActions.fetchProductComplete,
-      onFetchProductFailed: ProductActions.fetchProductFailed,
-      onFetchPeople: ProductActions.fetchPeople,
-      onFetchPeopleComplete: ProductActions.fetchPeopleComplete,
-      onFetchPeopleFailed: ProductActions.fetchPeopleFailed,
-      onFetchProductNames: ProductActions.fetchProductNames,
-      onFetchProductNamesComplete: ProductActions.fetchProductNamesComplete,
-      onFetchProductNamesFailed: ProductActions.fetchProductNamesFailed
-    });
+    this.bindActions(ProductActions);
 
     this.state = {
       product: {},
@@ -28,14 +16,12 @@ class ProductStore {
   }
 
   onFormStateUpdated(formState) {
-    const newState = Object.assign({}, this.state, {formState});
-    this.setState(newState);
+    this.setState({formState});
   }
 
   onSetProductField(field) {
     var product = Object.assign({}, this.state.product, field);
-    var newState = Object.assign({}, this.state, {product});
-    this.setState(newState);
+    this.setState({product});
   }
 
   onFetchProduct() {
@@ -84,31 +70,25 @@ class ProductStore {
     });
   }
   onFetchProductNames() {
-    var newState = Object.assign({}, this.state, {
+    this.setState({
       fetching: true,
       error: null
     });
-
-    this.setState(newState);
   }
 
   onFetchProductNamesComplete(productNames) {
-    var newState = Object.assign({}, this.state, {
+    this.setState({
       fetching: false,
       error: null,
       productNames
     });
-
-    this.setState(newState);
   }
 
   onFetchProductNamesFailed(error) {
-    var newState = Object.assign({}, this.state, {
+    this.setState({
       fetching: false,
       error
     });
-
-    this.setState(newState);
   }
 }
 

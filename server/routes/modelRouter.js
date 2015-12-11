@@ -1,7 +1,7 @@
 var express = require('express');
 
 function errorHandlerFn(res) {
-  return function(err) {
+  return function (err) {
     res.status(500).send(err);
   }
 }

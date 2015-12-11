@@ -54,7 +54,6 @@ class ProductView extends Component {
           <h1>Product</h1>
         </header>
 
-
         <div className="col-lg-12">
           <Form name="productForm" onFormStateUpdated={ProductActions.formStateUpdated}>
             <div className="col-lg-6">

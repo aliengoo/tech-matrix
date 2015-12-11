@@ -7,6 +7,7 @@ var babelify = require('babelify');
 var watchify = require('watchify');
 var path = require('path');
 var source = require('vinyl-source-stream');
+var notifier = require('node-notifier');
 
 gulp.task('vendor:css', function () {
   var src = [
@@ -54,15 +55,25 @@ gulp.task("build:js", function (done) {
     .transform(babelify)
     .bundle()
     .on('error', function(err){
-      lp.notify('Error during browserify');
       console.error(err.message);
+      notifier.notify({
+        title: "tech-matrix build:css",
+        message: err.message,
+        icon: path.join(__dirname,'.things/icons/browserify.png')
+      });
       done();
     })
     .pipe(source("app.js"))
     .pipe(gulp.dest("./public"))
-    .pipe(lp.livereload()).on('end', done);
+    .pipe(lp.livereload()).on('end', function(){
+      notifier.notify({
+        title: "tech-matrix build:css",
+        message: "Browserify finished",
+        icon: path.join(__dirname,'.things/icons/browserify.png')
+      });
+      done();
+    });
 });
-
 
 gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   lp.livereload({
@@ -70,5 +81,26 @@ gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   });
   gulp.watch(['client/**/*.js', 'client/**/*.jsx'], ["build:js"]);
   gulp.watch('client/**/*.css', ["build:css"]);
+
+  lp.nodemon({
+    delay: 0,
+    harmony: true,
+    script: './server/index.js',
+    stdout: false,
+    ext: 'js',
+    "ignore": ["node_modules", "client", "public", "gulpfile.js", ".things"]
+  }).on('readable', function () {
+    this.stdout.on('data', function (chunk) {
+      if (/tech-matrix is listening/.test(chunk)) {
+        notifier.notify({
+          title: "tech-matrix server",
+          message: "Restarted",
+          icon: path.join(__dirname,'.things/icons/nodejs.png')
+        });
+      }
+      process.stdout.write(chunk);
+    });
+    this.stderr.pipe(process.stderr);
+  });
 });
 

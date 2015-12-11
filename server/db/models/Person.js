@@ -8,6 +8,9 @@ var personSchema = new Schema({
     type: String,
     index: {unique: true}
   },
+  notes: {
+    type: String
+  },
   tags: {
     type: Array
   },
@@ -21,11 +24,12 @@ var personSchema = new Schema({
 // text indexes
 personSchema.index({
   name: 'text',
+  notes: 'text',
   tags: 'text'
 }, {
   name: 'Person text index',
   weights: {
-    name: 10, tags: 4
+    name: 10, notes: 4, tags: 1
   }
 });
 

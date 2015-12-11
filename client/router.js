@@ -2,12 +2,17 @@
 
 import React from 'react';
 import {Router, Route} from 'react-router';
+import App from './views/App.jsx';
+import ProductsView from './views/products/ProductsView.jsx';
 import ProductView from './views/product/ProductView.jsx';
 
 let router = (
   <Router>
-    <Route path="/product" component={ProductView}/>
-    <Route path="/product/:id" component={ProductView}/>
+    <Route path="/" component={App}>
+      <Route path="product" component={ProductView}/>
+      <Route path="product/:id" component={ProductView}/>
+      <Route path="products" components={ProductsView}/>
+    </Route>
   </Router>
 );
 
