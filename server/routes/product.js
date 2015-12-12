@@ -1,5 +1,5 @@
 "use strict";
-let Product = require('../db/models/Product');
-let modelRouter = require('./modelRouter')(Product, "product");
+let Product = require('../mongo-db/models/Product');
+let modelRouter = require('./mongoModelRouter')(Product, "product");
 
 module.exports = modelRouter;

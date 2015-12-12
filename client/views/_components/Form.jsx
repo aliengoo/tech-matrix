@@ -40,7 +40,6 @@ export default class Form extends Component {
     }
 
     this.formState.valid = valid;
-    console.log(this.formState);
     this.props.onFormStateUpdated(this.formState);
   }
 

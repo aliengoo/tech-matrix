@@ -3,6 +3,7 @@ global.jQuery = require('jquery');
 global.$ = global.jQuery;
 require('bootstrap');
 
+import './api/interceptors';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
