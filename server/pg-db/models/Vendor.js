@@ -1,39 +1,33 @@
-let Sequelize = require('sequelize');
-let database = require('../database');
-let User = require('./User');
+"use strict";
 
-const Vendor = database.define('vendor', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
-  },
-  createdBy: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: User,
-      key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+module.exports = function (sequelize, DataTypes) {
+  var Vendor = sequelize.define('Vendor', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    created: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updated: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     }
-  },
-  created: {
-    type: Sequelize.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW
-  },
-  updatedBy: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: User,
-      key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+  }, {
+    classMethods: {
+      associate: function (models) {
+        Vendor.belongsToMany(models.Product, {
+          through: "VendorProduct",
+          onDelete: "CASCADE"
+        });
+      }
     }
-  },
-  updated: {
-    type: Sequelize.DATE,
-    allowNull: false,
-    defaultValue: Sequelize.NOW
-  }
-});
+  });
 
-module.exports = Vendor;
+  return Vendor;
+};
+

@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function (sequelize, DataTypes) {
-  const Product = sequelize.define('product', {
+  var Product = sequelize.define('Product', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: false
     },
     riskRating: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0,
       validate: {min: 0, max: 5}
@@ -37,12 +37,6 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
       comment: 'Any notes related to the maintenance for the product'
     },
-    maintenanceVendorId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Vendor
-      }
-    },
     desupportDate: {
       type: DataTypes.DATE,
       comment: 'The desupport date set by the vendor'
@@ -56,18 +50,19 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
-    updatedBy: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: 'id',
-        deferrable: DataTypes.Deferrable.INITIALLY_IMMEDIATE
-      }
-    },
     updated: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
+    }
+  }, {
+    classMethods: {
+      associate: function(models) {
+        Product.belongsToMany(models.Vendor, {
+          through: "VendorProduct",
+          onDelete: "CASCADE"
+        });
+      }
     }
   });
 

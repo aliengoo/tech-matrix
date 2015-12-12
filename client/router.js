@@ -11,7 +11,7 @@ let router = (
   <Router>
     <Route path="/" component={App}>
       <Route path="login" component={LoginView}/>
-      <Route path="product" component={ProductView} onEnter={}/>
+      <Route path="product" component={ProductView}/>
       <Route path="product/:id" component={ProductView}/>
       <Route path="products" components={ProductsView}/>
     </Route>

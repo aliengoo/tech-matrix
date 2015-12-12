@@ -30,7 +30,7 @@ router.post('/api/authenticate', (req, res) => {
 
 // used by the client to check on their current authorization status.
 // this goes through the /api/auth middleware
-router.get('/api/auth/authorize', (req, res) => {
+router.get('/api/auth/verify', (req, res) => {
   res.json({
     success: true,
     username: req.decodedToken.username

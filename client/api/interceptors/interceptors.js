@@ -1,11 +1,10 @@
 import axios from 'axios';
 import store from 'store';
 import Q from 'q';
-
-const TechMatrixToken = "tech-matrix-token";
+import AuthApi from '../AuthApi';
 
 axios.interceptors.request.use((config) => {
-  var token = store.get(TechMatrixToken);
+  var token = AuthApi.getToken();
 
   if (token) {
     config.headers['x-access-token'] = token;

@@ -1,7 +1,7 @@
 import alt from '../../alt';
 import axios from 'axios';
 import _ from 'lodash';
-import token from '../../api/token';
+import AuthApi from '../../api/AuthApi';
 
 class LoginActions {
 
@@ -22,9 +22,9 @@ class LoginActions {
 
     // store
     if (data.success) {
-      token.set(data.token);
+      AuthApi.setToken(data.token);
     } else {
-      token.set();
+      AuthApi.setToken();
     }
 
     this.dispatch(response.data);
