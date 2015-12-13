@@ -44,23 +44,14 @@ module.exports = function (sequelize, DataTypes) {
     desupportNote: {
       type: DataTypes.STRING,
       comment: 'Any desupport notes, e.g. risks, actions, etc.'
-    },
-    created: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
-    },
-    updated: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
     }
   }, {
     classMethods: {
       associate: function(models) {
         Product.belongsToMany(models.Vendor, {
-          through: "VendorProduct",
-          onDelete: "CASCADE"
+          as: "Vendors",
+          through: "VendorProducts",
+          foreignKey: 'productId'
         });
       }
     }

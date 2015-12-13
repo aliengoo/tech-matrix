@@ -7,7 +7,11 @@ var babelify = require('babelify');
 var watchify = require('watchify');
 var path = require('path');
 var source = require('vinyl-source-stream');
-var notifier = require('node-notifier');
+//var notifier = require('node-notifier');
+var WindowsToaster = require('node-notifier').WindowsToaster;
+var notifier = new WindowsToaster({
+  withFallback: false
+});
 
 gulp.task('vendor:css', function () {
   var src = [
@@ -83,21 +87,23 @@ gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   gulp.watch('client/**/*.css', ["build:css"]);
 
   lp.nodemon({
-    delay: 0,
-    debug: true,
+    nodeArgs: ['--debug'],
     harmony: true,
-    script: './server/index.js',
+    script: path.join(__dirname, '/server/index.js'),
     stdout: false,
     ext: 'js',
-    "ignore": ["node_modules", "client", "public", "gulpfile.js", ".things"]
+    "ignore": ["node_modules", "client", "public", "gulpfile.js", ".things", ".idea"]
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if (/tech-matrix is listening/.test(chunk)) {
-        notifier.notify({
+        var options = {withFallback: false};
+        var notification = {
           title: "tech-matrix server",
-          message: "Restarted",
-          icon: path.join(__dirname,'.things/icons/nodejs.png')
-        });
+            message: "Restarted",
+            icon: path.join(__dirname,'.things/icons/nodejs.png')
+        };
+
+        notifier.notify(notification);
       }
       process.stdout.write(chunk);
     });

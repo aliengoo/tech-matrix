@@ -20,10 +20,12 @@ app.set('views', path.resolve(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // middleware
-//app.use(require('./middleware/authenticateMiddleware'));
+app.use(require('./middleware/authenticateMiddleware'));
 
 // api
+app.use(require('./routes/authenticationRouter'));
 app.use(require('./routes/productRouter'));
+app.use(require('./routes/vendorRouter'));
 
 // index
 app.get('/', (req, res) => {

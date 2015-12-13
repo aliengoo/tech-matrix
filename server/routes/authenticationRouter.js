@@ -4,6 +4,10 @@ let router = require('express').Router();
 let config = require('../config/config');
 let authenticate = require('../ldap/ldapAuthenticate');
 let jwt = require('jsonwebtoken');
+let models = require('../pg-db/models');
+let TokenAdapter = require('../pg-db/adapters/TokenAdapter');
+
+let tokenAdapter = new TokenAdapter(models);
 
 router.post('/api/authenticate', (req, res) => {
   authenticate(req.body.username, req.body.password)
@@ -14,11 +18,13 @@ router.post('/api/authenticate', (req, res) => {
         expiresInMinutes: 1440
       });
 
-      res.json({
-        success: true,
-        message: `Hello, ${req.body.username}`,
-        token
-      });
+      tokenAdapter.create(req.body.username, token).then(() => {
+        res.json({
+          success: true,
+          message: `Hello, ${req.body.username}`,
+          token
+        });
+      }).catch(error => res.status(500).send(error));
     })
     .catch(() => {
       res.status(401).json({

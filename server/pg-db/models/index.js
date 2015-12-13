@@ -32,8 +32,9 @@ Object.keys(db).forEach(function (modelName) {
   }
 });
 
-db.Product.sync({force: true});
-db.Vendor.sync({force: true});
+var options = {force: true};
+
+sequelize.sync(options);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
