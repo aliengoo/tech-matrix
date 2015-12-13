@@ -1,5 +1,7 @@
 import connectToStores from 'alt/utils/connectToStores';
 import React, {Component, PropTypes} from 'react';
+import AppStore from '../AppStore';
+import AppActions from '../AppActions';
 import ProductStore from './ProductStore';
 import ProductActions from './ProductActions';
 
@@ -22,11 +24,16 @@ class ProductView extends Component {
   }
 
   static getStores() {
-    return [ProductStore];
+    return [AppStore, ProductStore];
   }
 
   static getPropsFromStores() {
-    return ProductStore.getState();
+
+    var props = Object.assign(
+      {},
+      ProductStore.getState(),
+      AppStore.getState());
+    return props;
   }
 
   componentDidMount() {

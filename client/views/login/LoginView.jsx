@@ -1,6 +1,6 @@
 import connectToStores from 'alt/utils/connectToStores';
 import React, {Component, PropTypes} from 'react';
-import From from '../_components/Form.jsx';
+import Form from '../_components/Form.jsx';
 import LoginStore from './LoginStore';
 import LoginActions from './LoginActions';
 import LoginUsername from './_components/LoginUsername.jsx'

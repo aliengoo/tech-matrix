@@ -1,11 +1,12 @@
 import alt from '../../alt';
 import axios from 'axios';
 import _ from 'lodash';
+import AppActions from '../AppActions';
 import AuthApi from '../../api/AuthApi';
 
 class LoginActions {
 
-  setFormState(formState){
+  setFormState(formState) {
     this.dispatch(formState);
   }
 
@@ -13,50 +14,25 @@ class LoginActions {
     this.dispatch(field);
   }
 
-  loginUserFailed(response) {
-    this.dispatch(response.data);
-  }
-
-  loginUserComplete(response) {
-    var data = response.data;
-
-    // store
-    if (data.success) {
-      AuthApi.setToken(data.token);
-    } else {
-      AuthApi.setToken();
-    }
-
-    this.dispatch(response.data);
-  }
-
   loginUser(credentials) {
     this.dispatch();
 
-    token.set();
+    AuthApi.setToken();
 
-    axios.post('/api/user/login', credentials)
-      .then(this.actions.loginUserComplete)
-      .catch(this.actions.loginUserFailed);
+    axios.post('/api/authenticate', credentials)
+      .then((r) => {
+        if (r.data.success) {
+          AuthApi.setToken(r.data.token);
+          AppActions.successfulAuthentication(r.data.username);
+        } else {
+          AppActions.failedAuthentication(r.data);
+        }
+      })
+      .catch(r => AppActions.failedAuthentication(r.data));
   }
 
-  logoutUserFailed(response) {
-    this.dispatch(response.data);
-  }
 
-  logoutUserComplete(response) {
-    this.dispatch(response.data);
-  }
 
-  logoutUser() {
-    this.dispatch();
-
-    token.set();
-
-    axios.post('/api/user/logout')
-      .then(this.actions.logoutUserComplete)
-      .catch(this.actions.logoutUserFailed);
-  }
 }
 
 export default alt.createActions(LoginActions);

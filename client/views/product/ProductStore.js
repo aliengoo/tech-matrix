@@ -1,4 +1,5 @@
 import alt from '../../alt';
+import AppActions from '../AppActions';
 import ProductActions from './ProductActions';
 
 class ProductStore {
@@ -9,8 +10,6 @@ class ProductStore {
       product: {},
       people: [],
       productNames: [],
-      error: null,
-      fetching: false,
       formState: null
     };
   }
@@ -25,9 +24,8 @@ class ProductStore {
   }
 
   onFetchProduct() {
-    this.setState({
-      fetching: true
-    });
+
+    this.setState({});
   }
 
   onFetchProductComplete(product) {
@@ -56,8 +54,6 @@ class ProductStore {
 
   onFetchPeopleComplete(people) {
     this.setState({
-      fetching: false,
-      error: null,
       people
     });
   }
@@ -69,16 +65,13 @@ class ProductStore {
       people: []
     });
   }
+
   onFetchProductNames() {
-    this.setState({
-      fetching: true,
-      error: null
-    });
+    this.setState({});
   }
 
   onFetchProductNamesComplete(productNames) {
     this.setState({
-      fetching: false,
       error: null,
       productNames
     });
@@ -86,7 +79,6 @@ class ProductStore {
 
   onFetchProductNamesFailed(error) {
     this.setState({
-      fetching: false,
       error
     });
   }

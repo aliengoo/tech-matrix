@@ -19,6 +19,7 @@ router.use('/api/auth/*', (req, res, next) => {
           message: 'Failed to authenticate token'
         });
       } else {
+        req.token = token;
         req.decodedToken = decodedToken;
         tokenAdapter.setLastAccessed(token).then(() => {
           next();

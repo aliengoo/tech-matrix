@@ -9,6 +9,14 @@ let TokenAdapter = require('../pg-db/adapters/TokenAdapter');
 
 let tokenAdapter = new TokenAdapter(models);
 
+router.post('/api/auth/logout', (req, res) => {
+  tokenAdapter.destroy(req.token)
+    .then(() => res.json({
+      success: true
+    }))
+    .catch(error => res.status(500).send(error));
+});
+
 router.post('/api/authenticate', (req, res) => {
   authenticate(req.body.username, req.body.password)
     .then(() => {

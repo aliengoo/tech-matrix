@@ -8,7 +8,7 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
 
-    this.formObservable = null;
+    this.formObservable = {};
     this.formState = {
       valid: true
     };

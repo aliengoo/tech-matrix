@@ -1,4 +1,5 @@
 import alt from '../../alt';
+import AppActions from '../AppActions';
 import LoginActions from './LoginActions';
 
 class LoginStore {
@@ -10,9 +11,7 @@ class LoginStore {
         valid: false
       },
       username: "",
-      password: "",
-      fetching: false,
-      error: null
+      password: ""
     };
   }
 
@@ -27,9 +26,10 @@ class LoginStore {
   }
 
   onLoginUserFailed(error) {
+    AppActions.fetchEnded();
+
     this.setState({
       username: "",
-      fetching: false,
       error
     });
   }
@@ -68,4 +68,4 @@ class LoginStore {
   }
 }
 
-export default alt.createStore(LoginActions);
+export default alt.createStore(LoginStore);
