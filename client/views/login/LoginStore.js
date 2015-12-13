@@ -25,45 +25,10 @@ class LoginStore {
     this.setState(field);
   }
 
-  onLoginUserFailed(error) {
-    AppActions.fetchEnded();
-
-    this.setState({
-      username: "",
-      error
-    });
-  }
-
-  onLoginUserComplete(response) {
-    this.setState({
-      username: response.username,
-      fetching: false
-    });
-  }
-
   onLoginUser() {
     this.setState({
-      fetching: true
-    });
-  }
-
-  onLogoutUserFailed(error) {
-    this.setState({
-      fetching: false,
-      error
-    });
-  }
-
-  onLogoutUserComplete(response) {
-    this.setState({
-      username: null,
-      fetching: false
-    });
-  }
-
-  onLogoutUser() {
-    this.setState({
-      fetching: true
+      username: "",
+      password: ""
     });
   }
 }

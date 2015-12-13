@@ -4,32 +4,33 @@ import Q from 'q';
 
 const TokenName = "tech-matrix/auth-token";
 
-class AuthApi {
-  constructor() {
+function verify() {
+  var defer = Q.defer();
+  axios.get('/api/auth/verify').then((response) => {
+    defer.resolve(response.data);
+  }).catch((response) => {
+    clearToken();
+    defer.reject(response.data);
+  });
 
-  }
-
-  verify() {
-    var defer = Q.defer();
-    axios.get('/api/auth/verify').then((response) => {
-      defer.resolve(response.data);
-    }).catch((response) => {
-      AuthApi.clearToken();
-      defer.reject(response.data);
-    });
-
-    return defer.promise;
-  }
-
-  static getToken() {
-    return store.get(TokenName);
-  }
-
-  static clearToken() {
-    store.clear();
-  }
-
-  static setToken(token = undefined) {
-    store.set(TokenName, token);
-  }
+  return defer.promise;
 }
+
+function getToken() {
+  return store.get(TokenName);
+}
+
+function clearToken () {
+  store.clear();
+}
+
+function setToken(token = undefined) {
+  store.set(TokenName, token);
+}
+
+export default {
+  verify,
+  getToken,
+  clearToken,
+  setToken
+};

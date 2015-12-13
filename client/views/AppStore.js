@@ -40,6 +40,7 @@ class AppStore {
 
   onSuccessfulAuthentication(username) {
     this.setState({
+      fetching: false,
       username,
       isAuthenticated: true
     });
@@ -47,6 +48,7 @@ class AppStore {
 
   onFailedAuthentication(error) {
     this.setState({
+      fetching: false,
       username: "",
       isAuthenticated: false,
       error

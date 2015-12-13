@@ -18,6 +18,7 @@ class LoginActions {
     this.dispatch();
 
     AuthApi.setToken();
+    AppActions.fetchStarted();
 
     axios.post('/api/authenticate', credentials)
       .then((r) => {
@@ -30,9 +31,6 @@ class LoginActions {
       })
       .catch(r => AppActions.failedAuthentication(r.data));
   }
-
-
-
 }
 
 export default alt.createActions(LoginActions);
