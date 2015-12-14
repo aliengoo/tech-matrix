@@ -15,3 +15,10 @@ axios.interceptors.request.use((config) => {
   return Q.reject(error);
 });
 
+// all responses from the API must either be data, or
+axios.interceptors.response.use((response) => {
+  return response.data;
+}).catch((response) => {
+  console.error(response);
+});
+
