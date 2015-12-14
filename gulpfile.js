@@ -10,7 +10,7 @@ var source = require('vinyl-source-stream');
 //var notifier = require('node-notifier');
 var WindowsToaster = require('node-notifier').WindowsToaster;
 var notifier = new WindowsToaster({
-  withFallback: false
+  withFallback: true
 });
 
 gulp.task('vendor:css', function () {
@@ -86,17 +86,9 @@ gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   gulp.watch(['client/**/*.js', 'client/**/*.jsx'], ["build:js"]);
   gulp.watch('client/**/*.css', ["build:css"]);
 
-  lp.nodemon({
-    nodeArgs: ['--debug'],
-    harmony: true,
-    script: path.join(__dirname, '/server/index.js'),
-    stdout: false,
-    ext: 'js',
-    "ignore": ["node_modules", "client", "public", "gulpfile.js", ".things", ".idea"]
-  }).on('readable', function () {
+  lp.nodemon().on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if (/tech-matrix is listening/.test(chunk)) {
-        var options = {withFallback: false};
         var notification = {
           title: "tech-matrix server",
             message: "Restarted",

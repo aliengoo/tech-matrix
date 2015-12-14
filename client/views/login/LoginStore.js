@@ -26,10 +26,7 @@ class LoginStore {
   }
 
   onLoginUser() {
-    this.setState({
-      username: "",
-      password: ""
-    });
+    this.setState();
   }
 }
 

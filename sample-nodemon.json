@@ -1,0 +1,20 @@
+{
+  "ignore": [
+    ".git", "node_modules", "client", "public", "gulpfile.js", ".things", ".idea"
+  ],
+  "verbose": true,
+  "stdout": false,
+  "execMap": {
+    "js": "node --harmony --debug"
+  },
+  "script": "server/index.js",
+  "watch": [
+    "server"
+  ],
+  "env": {
+    "LDAP_URI": "ldaps://10.0.0.16:389",
+    "LDAP_BASE_DSN": "cn=users,dc=diskstation,dc=com",
+    "NODE_ENV": "development"
+  },
+  "ext": "js"
+}

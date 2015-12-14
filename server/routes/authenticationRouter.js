@@ -1,6 +1,7 @@
 "use strict";
 
 let router = require('express').Router();
+
 let config = require('../config/config');
 let authenticate = require('../ldap/ldapAuthenticate');
 let jwt = require('jsonwebtoken');
@@ -18,6 +19,14 @@ router.post('/api/auth/logout', (req, res) => {
 });
 
 router.post('/api/authenticate', (req, res) => {
+  if (!req.body.username || !req.body.password) {
+    res.status(400).json({
+      success: false,
+      error: "Bad Request"
+    });
+    return;
+  }
+
   authenticate(req.body.username, req.body.password)
     .then(() => {
       let token = jwt.sign({

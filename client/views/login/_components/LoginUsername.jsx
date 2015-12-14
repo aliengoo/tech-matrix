@@ -16,6 +16,8 @@ export default class LoginUsername extends Component {
   }
 
   render() {
+    const {defaultValue} = this.props;
+
     return (
       <div>
         <FormGroup>
@@ -24,6 +26,7 @@ export default class LoginUsername extends Component {
             type="text"
             className="form-control"
             required
+            defaultValue={defaultValue}
             ref={this.componentName}
             name={this.componentName}
             id={this.componentName}
@@ -35,5 +38,6 @@ export default class LoginUsername extends Component {
 }
 
 LoginUsername.propTypes = {
+  defaultValue: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };

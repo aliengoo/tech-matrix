@@ -7,7 +7,6 @@ import Rx from 'rx';
 export default class Form extends Component {
   constructor(props) {
     super(props);
-
     this.formObservable = {};
     this.formState = {
       valid: true
@@ -69,14 +68,14 @@ export default class Form extends Component {
   }
 
   componentWillUnmount() {
-    this.formObservable.unsubscribe();
+    this.formObservable.dispose();
   }
 
   render() {
     const {name} = this.props;
 
     return (
-      <form name={name}>
+      <form name={name} noValidate>
         {this.renderChildren()}
       </form>
     );

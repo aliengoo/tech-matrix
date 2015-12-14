@@ -49,7 +49,6 @@ class AppStore {
   onFailedAuthentication(error) {
     this.setState({
       fetching: false,
-      username: "",
       isAuthenticated: false,
       error
     });

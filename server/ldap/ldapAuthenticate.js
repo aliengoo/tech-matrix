@@ -11,7 +11,11 @@ function authenticate(username, password) {
     url: ldapConfig.url
   });
 
-  client.bind(`uid=${username},${ldapConfig.usersDn}`, password, (err) => {
+  let bind = `sAMAccountName=${username},${ldapConfig.usersDn}`;
+
+  console.log(bind);
+
+  client.bind(bind, password, (err) => {
     client.unbind();
     if (err) {
       defer.reject(err);

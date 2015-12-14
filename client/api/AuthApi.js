@@ -12,9 +12,9 @@ function verify() {
     clearToken();
     defer.reject(response.data);
   });
-
   return defer.promise;
 }
+
 
 function getToken() {
   return store.get(TokenName);

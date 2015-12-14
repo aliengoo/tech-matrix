@@ -3,8 +3,8 @@ module.exports = {
     secret: "milesandmilesandmilesofroad"
   },
   ldap: {
-    url: "ldap://10.0.0.16:389",
-    usersDn: "cn=users,dc=diskstation,dc=com"
+    url: process.env.LDAP_URI,
+    usersDn: process.env.LDAP_BASE_DSN
   },
   dbConnection: {
     database: "techmatrix",

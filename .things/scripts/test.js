@@ -1,0 +1,7 @@
+"use strict";
+
+console.log("TECH_MATRIX_LDAP_URI", process.env.TECH_MATRIX_LDAP_URI);
+console.log("TECH_MATRIX_LDAP_USERNAME", process.env.TECH_MATRIX_LDAP_USERNAME);
+console.log("TECH_MATRIX_LDAP_PASSWORD", process.env.TECH_MATRIX_LDAP_PASSWORD);
+console.log("TECH_MATRIX_LDAP_BASE_DSN", process.env.TECH_MATRIX_LDAP_BASE_DSN);
+console.log("TECH_MATRIX_LDAP_USER_FILTER", process.env.TECH_MATRIX_LDAP_USER_FILTER);

@@ -16,6 +16,7 @@ export default class LoginPassword extends Component {
   }
 
   render() {
+    const {defaultValue} = this.props;
     return (
       <div>
         <FormGroup>
@@ -24,6 +25,7 @@ export default class LoginPassword extends Component {
             type="password"
             className="form-control"
             required
+            defaultValue={defaultValue}
             ref={this.componentName}
             name={this.componentName}
             id={this.componentName}
@@ -35,5 +37,6 @@ export default class LoginPassword extends Component {
 }
 
 LoginPassword.propTypes = {
+  defaultValue: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
