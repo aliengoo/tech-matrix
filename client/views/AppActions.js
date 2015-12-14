@@ -1,9 +1,14 @@
 import alt from '../alt';
 import axios from 'axios';
 import _ from 'lodash';
-import AuthApi from '../api/AuthApi';
+
+import AuthenticationApi from '../common/AuthenticationApi';
 
 class AppActions {
+
+  constructor() {
+    this.authenticationApi = new AuthenticationApi();
+  }
 
   fetchStarted() {
     this.dispatch();
@@ -32,19 +37,19 @@ class AppActions {
   logoutUser() {
     this.dispatch();
 
-    AuthApi.setToken();
+    this.authenticationApi.setToken();
 
     axios.post('/api/auth/logout')
       .then(this.actions.loggedOut)
-      .catch(response => this.actions.failedLogout(response));
+      .catch(this.actions.failedLogout);
   }
 
   loggedOut() {
     this.dispatch();
   }
 
-  failedLogout(response) {
-    this.dispatch(response.data);
+  failedLogout(result) {
+    this.dispatch(result.error);
   }
 }
 

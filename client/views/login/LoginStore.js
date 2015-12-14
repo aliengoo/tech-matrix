@@ -25,7 +25,7 @@ class LoginStore {
     this.setState(field);
   }
 
-  onLoginUser() {
+  onLogin() {
     this.setState();
   }
 }

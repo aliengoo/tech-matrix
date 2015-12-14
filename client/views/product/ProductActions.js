@@ -1,67 +1,35 @@
 import alt from '../../alt';
 import axios from 'axios';
 import _ from 'lodash';
-import ModelApi from '../../api/ModelApi';
-
-const productApi = new ModelApi("product");
-const peopleApi = new ModelApi("people");
+import ProductApi from './ProductApi';
 
 class ProductActions {
+
+  constructor() {
+    this.productApi = new ProductApi();
+  }
 
   formStateUpdated(formState) {
     this.dispatch(formState);
   }
 
-  setProductField(field) {
+  setField(field) {
     this.dispatch(field);
   }
 
-  fetchProductComplete(response) {
-    this.dispatch(response.data);
-  }
-
-  fetchProductFailed(response) {
-    this.dispatch(response);
-  }
-
-  fetchProduct(id) {
+  get(id) {
     this.dispatch();
-
-    productApi.get(id)
-      .then(this.actions.fetchProductComplete)
-      .catch(this.actions.fetchProductFailed);
+    this.productApi.get(id)
+      .then(this.actions.getComplete)
+      .catch(this.actions.getFailed);
   }
 
-  fetchPeopleComplete(response) {
-    this.dispatch(response.data);
+  getComplete(product) {
+    this.dispatch(product);
   }
 
-  fetchPeopleFailed(response) {
-    this.dispatch(response);
-  }
-
-  fetchPeople() {
-    this.dispatch();
-
-    peopleApi.getNames()
-      .then(this.actions.fetchPeopleComplete)
-      .catch(this.actions.fetchPeopleFailed);
-  }
-
-  fetchProductNamesComplete(response) {
-    this.dispatch(response.data);
-  }
-
-  fetchProductNamesFailed(response) {
-    this.dispatch(response.data);
-  }
-
-  fetchProductNames() {
-    this.dispatch();
-
-    productApi.getNames()
-      .then(this.actions.fetchProductNamesComplete)
-      .catch(this.actions.fetchProductNamesFailed);
+  getFailed(responseData) {
+    this.dispatch(responseData);
   }
 }
 

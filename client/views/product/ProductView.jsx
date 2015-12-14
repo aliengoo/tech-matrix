@@ -20,7 +20,7 @@ class ProductView extends Component {
 
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
+    this.setField = this.setField.bind(this);
   }
 
   static getStores() {
@@ -39,16 +39,13 @@ class ProductView extends Component {
   componentDidMount() {
     const {params} = this.props;
 
-    ProductActions.fetchPeople();
-    ProductActions.fetchProductNames();
-
     if (params && params.id) {
-      ProductActions.fetchProduct(params.id);
+      ProductActions.get(params.id);
     }
   }
 
-  onChange(field) {
-    ProductActions.setProductField(field);
+  setField(field) {
+    ProductActions.setField(field);
   }
 
   render() {
@@ -68,53 +65,53 @@ class ProductView extends Component {
               <ProductName
                 fetching={fetching}
                 value={product.name}
-                onChange={value => this.onChange({'name': value})}/>
+                onChange={value => this.setField({'name': value})}/>
 
               <ProductRelatedProducts
                 fetching={fetching}
                 value={product.relatedProducts}
                 options={productNames}
-                onChange={value => this.onChange({'relatedProducts': value})}/>
+                onChange={value => this.setField({'relatedProducts': value})}/>
 
               <ProductTechnologyOwners
                 fetching={fetching}
                 value={product.technologyOwners}
                 options={people}
-                onChange={value => this.onChange({'technologyOwners': value})}/>
+                onChange={value => this.setField({'technologyOwners': value})}/>
 
               <ProductBusinessOwners
                 fetching={fetching}
                 value={product.businessOwners}
                 options={people}
-                onChange={value => this.onChange({'businessOwners': value})}/>
+                onChange={value => this.setField({'businessOwners': value})}/>
 
               <ProductNotes
                 fetching={fetching}
                 value={product.notes}
-                onChange={value => this.onChange({'notes': value})}/>
+                onChange={value => this.setField({'notes': value})}/>
             </div>
 
             <div className="col-lg-6">
               <ProductMaintenanceEndDate
                 value={product.maintenanceEndDate}
                 fetching={fetching}
-                onChange={value => this.onChange({'maintenanceEndDate': value})}
+                onChange={value => this.setField({'maintenanceEndDate': value})}
               />
 
               <ProductMaintenanceNotes
                 value={product.maintenanceNotes}
                 fetching={fetching}
-                onChange={value => this.onChange({'maintenanceNotes': value})}/>
+                onChange={value => this.setField({'maintenanceNotes': value})}/>
 
               <ProductSupportEndDate
                 value={product.supportEndDate}
                 fetching={fetching}
-                onChange={value => this.onChange({'supportEndDate': value})}/>
+                onChange={value => this.setField({'supportEndDate': value})}/>
 
               <ProductSupportNotes
                 value={product.supportNotes}
                 fetching={fetching}
-                onChange={value => this.onChange({'supportNotes': value})}/>
+                onChange={value => this.setField({'supportNotes': value})}/>
             </div>
 
           </Form>

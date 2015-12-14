@@ -8,8 +8,6 @@ class ProductStore {
 
     this.state = {
       product: {},
-      people: [],
-      productNames: [],
       formState: null
     };
   }
@@ -18,68 +16,26 @@ class ProductStore {
     this.setState({formState});
   }
 
-  onSetProductField(field) {
+  onSetField(field) {
     var product = Object.assign({}, this.state.product, field);
     this.setState({product});
   }
 
-  onFetchProduct() {
-
+  onGet() {
+    AppActions.fetchStarted();
     this.setState({});
   }
 
-  onFetchProductComplete(product) {
+  onGetComplete(product) {
     this.setState({
-      fetching: false,
-      error: null,
       product
     });
   }
 
-  onFetchProductFailed(error) {
+  onGetFailed(error) {
     this.setState({
-      fetching: false,
       error,
       product: null
-    });
-  }
-
-  onFetchPeople() {
-    this.setState({
-      fetching: true,
-      error: null,
-      people: []
-    });
-  }
-
-  onFetchPeopleComplete(people) {
-    this.setState({
-      people
-    });
-  }
-
-  onFetchPeopleFailed(error) {
-    this.setState({
-      fetching: false,
-      error,
-      people: []
-    });
-  }
-
-  onFetchProductNames() {
-    this.setState({});
-  }
-
-  onFetchProductNamesComplete(productNames) {
-    this.setState({
-      error: null,
-      productNames
-    });
-  }
-
-  onFetchProductNamesFailed(error) {
-    this.setState({
-      error
     });
   }
 }

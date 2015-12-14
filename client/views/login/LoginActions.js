@@ -2,9 +2,16 @@ import alt from '../../alt';
 import axios from 'axios';
 import _ from 'lodash';
 import AppActions from '../AppActions';
-import AuthApi from '../../api/AuthApi';
+
+import AuthenticationApi from '../../common/AuthenticationApi';
 
 class LoginActions {
+
+  constructor() {
+    super();
+
+    this.authenticationApi = new AuthenticationApi();
+  }
 
   setFormState(formState) {
     this.dispatch(formState);
@@ -14,22 +21,31 @@ class LoginActions {
     this.dispatch(field);
   }
 
-  loginUser(credentials) {
+  login(username, password) {
     this.dispatch();
 
-    AuthApi.setToken();
+    // clear the current token
+    this.authenticationApi.setToken();
+
+    // notify at application level we are fetching
     AppActions.fetchStarted();
 
-    axios.post('/api/authenticate', credentials)
-      .then((r) => {
-        if (r.data.success) {
-          AuthApi.setToken(r.data.token);
-          AppActions.successfulAuthentication(r.data.username);
+    this.authenticationApi.authenticate(username, password)
+      .then((result) => {
+
+        if (result.success) {
+          // set the token in localStorage
+          this.authenticationApi.setToken(result.token);
+
+          // assign the username to the AppStore
+          AppActions.successfulAuthentication(result.username);
         } else {
-          AppActions.failedAuthentication(r.data);
+          AppActions.failedAuthentication(result.error);
         }
-      })
-      .catch(r => AppActions.failedAuthentication(r.data));
+
+      }).catch((result) => {
+        AppActions.failedAuthentication(result.error);
+      });
   }
 }
 
