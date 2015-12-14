@@ -6,18 +6,14 @@ import axios from 'axios';
 const BaseUrl = "/api/registration";
 
 export default class RegistrationApi {
-  constructor() {
 
-  }
-
-  isUsernameTaken() {
-
+  isUsernameTaken(username) {
+    return axios.get(`${BaseUrl}`, {
+      params: {username}
+    });
   }
 
   register(username, password) {
-
-
-     axios.post(`${BaseUrl}/register`, {username, password})
-       .then();
+     return axios.post(`${BaseUrl}/register`, {username, password});
   }
 }
