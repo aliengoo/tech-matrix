@@ -63,7 +63,10 @@ class UserAdapter {
       where: {
         username
       }
-    }).then(count => d.resolve(count > 0));
+    }).then(count => {
+      console.log("count:" + count);
+      d.resolve(count > 0);
+    });
 
     return d.promise;
   }

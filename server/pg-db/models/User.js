@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
       unique: true
     },
     passwordHash: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false
     }
   });

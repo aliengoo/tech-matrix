@@ -1,12 +1,11 @@
 import axios from 'axios';
 import store from 'store';
 import Q from 'q';
-import _ from 'lodash';
 import AuthenticationApi from './AuthenticationApi';
 
-var authenticationApi = new AuthenticationApi();
+let authenticationApi = new AuthenticationApi();
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use((config) => {
   var token = authenticationApi.getToken();
 
   if (token) {
@@ -14,17 +13,16 @@ axios.interceptors.request.use(config => {
   }
 
   return config;
-}, error => Q.reject(error));
+}, (error) => {
+  return Q.reject(error);
+});
 
-
-// all responses from the API must either be data, or it's broken
-axios.interceptors.response.use(response => response.data, response => {
-    var error = _.get(response, "data.error", {
-      message: "API data was empty"
-    });
-
-    console.error(`!API: ${response.status} - ${response.statusText}:`, error);
-
-    return response;
+// all responses from the API must either be data, or
+axios.interceptors.response
+  .use(response => {
+    return response.data;
+  }, response => {
+    console.error(`!API-> ${response.status} - ${response.statusText}:`, response.data);
+    return response.data;
   });
 

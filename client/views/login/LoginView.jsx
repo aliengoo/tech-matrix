@@ -2,11 +2,11 @@ import _ from 'lodash';
 import connectToStores from 'alt/utils/connectToStores';
 import React, {Component, PropTypes} from 'react';
 import Form from '../_components/Form.jsx';
+import UsernameInput from '../_components/UsernameInput.jsx'
+import PasswordInput from '../_components/PasswordInput.jsx'
 import AppStore from '../AppStore';
 import LoginStore from './LoginStore';
 import LoginActions from './LoginActions';
-import LoginUsername from './_components/LoginUsername.jsx'
-import LoginPassword from './_components/LoginPassword.jsx'
 
 export default class LoginView extends Component {
 
@@ -19,7 +19,7 @@ export default class LoginView extends Component {
   }
 
   static getPropsFromStores() {
-    var props = Object.assign(
+    return Object.assign(
       {},
       AppStore.getState(),
       LoginStore.getState());
@@ -50,8 +50,8 @@ export default class LoginView extends Component {
           </header>
 
           <Form name="loginForm" onFormStateUpdated={formState => LoginActions.setFormState(formState)}>
-            <LoginUsername onChange={username => this.setField({username})} defaultValue={username}/>
-            <LoginPassword onChange={password => this.setField({password})} defaultValue={password}/>
+            <UsernameInput onChange={username => this.setField({username})} defaultValue={username}/>
+            <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
             <button
               className="btn btn-primary btn"
               type="button"

@@ -12,7 +12,7 @@
   "dependencies": {
     "activedirectory": "^0.7.1",
     "alt": "^0.17.9",
-    "axios": "^0.7.0",
+    "axios": "^0.8.1",
     "bcrypt": "^0.8.5",
     "body-parser": "^1.14.1",
     "bootstrap": "^3.3.6",

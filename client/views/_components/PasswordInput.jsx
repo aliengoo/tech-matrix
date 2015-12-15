@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
-import FormGroup from '../../_components/FormGroup.jsx';
-import Label from '../../_components/Label.jsx';
+import FormGroup from './FormGroup.jsx';
+import Label from './Label.jsx';
 
-export default class LoginPassword extends Component {
+export default class PasswordInput extends Component {
 
   constructor(props) {
     super(props);
@@ -16,7 +16,7 @@ export default class LoginPassword extends Component {
   }
 
   render() {
-    const {defaultValue} = this.props;
+    const {defaultValue, children} = this.props;
     return (
       <div>
         <FormGroup>
@@ -30,13 +30,14 @@ export default class LoginPassword extends Component {
             name={this.componentName}
             id={this.componentName}
             onChange={this.onChange}/>
+          {children}
         </FormGroup>
       </div>
     );
   }
 }
 
-LoginPassword.propTypes = {
+PasswordInput.propTypes = {
   defaultValue: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };

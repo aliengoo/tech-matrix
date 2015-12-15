@@ -4,6 +4,7 @@ import React from 'react';
 import {Router, Route} from 'react-router';
 import App from './views/App.jsx';
 import LoginView from './views/login/LoginView.jsx';
+import RegistrationView from './views/registration/RegistrationView.jsx';
 import TestView from './views/test/TestView.jsx';
 import ProductsView from './views/products/ProductsView.jsx';
 import ProductView from './views/product/ProductView.jsx';
@@ -13,6 +14,7 @@ let router = (
     <Route path="/" component={App}>
       <Route path="test" component={TestView}/>
       <Route path="login" component={LoginView}/>
+      <Route path="registration" component={RegistrationView}/>
       <Route path="product" component={ProductView}/>
       <Route path="product/:id" component={ProductView}/>
       <Route path="products" components={ProductsView}/>

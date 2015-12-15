@@ -10,8 +10,8 @@ let userAdapter = new UserAdapter(models);
 
 router.post('/api/registration/register', (req, res) => {
 
-  req.checkBody('username', 'Invalid username').notEmpty().isAlpha();
-  req.checkBody('password', 'Invalid password').notEmpty().isAlpha();
+  req.checkBody('username', 'Invalid username').notEmpty().isEmail();
+  req.checkBody('password', 'Invalid password').notEmpty().len(8, 50);
 
   let errors = req.validationErrors();
 
@@ -29,7 +29,7 @@ router.post('/api/registration/register', (req, res) => {
 
 router.get('/api/registration/does-username-exist', (req, res) => {
 
-  req.checkQuery('username', 'Parameter invalid').notEmpty().isAlpha();
+  req.checkQuery('username', 'Parameter invalid').notEmpty();
 
   let errors = req.validationErrors();
 
@@ -39,9 +39,10 @@ router.get('/api/registration/does-username-exist', (req, res) => {
       error: util.inspect(errors)
     });
   } else {
-    userAdapter.doesUsernameExist(req.params.username).then((exists) => {
+    userAdapter.doesUsernameExist(req.query.username).then((exists) => {
       res.json({
-        success: !exists
+        success: true,
+        exists
       });
     }, error(res));
   }
