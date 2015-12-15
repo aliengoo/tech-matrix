@@ -86,20 +86,20 @@ gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   gulp.watch(['client/**/*.js', 'client/**/*.jsx'], ["build:js"]);
   gulp.watch('client/**/*.css', ["build:css"]);
 
-  lp.nodemon().on('readable', function () {
-    this.stdout.on('data', function (chunk) {
-      if (/tech-matrix is listening/.test(chunk)) {
-        var notification = {
-          title: "tech-matrix server",
-            message: "Restarted",
-            icon: path.join(__dirname,'.things/icons/nodejs.png')
-        };
-
-        notifier.notify(notification);
-      }
-      process.stdout.write(chunk);
-    });
-    this.stderr.pipe(process.stderr);
-  });
+  //lp.nodemon().on('readable', function () {
+  //  this.stdout.on('data', function (chunk) {
+  //    if (/tech-matrix is listening/.test(chunk)) {
+  //      var notification = {
+  //        title: "tech-matrix server",
+  //          message: "Restarted",
+  //          icon: path.join(__dirname,'.things/icons/nodejs.png')
+  //      };
+  //
+  //      notifier.notify(notification);
+  //    }
+  //    process.stdout.write(chunk);
+  //  });
+  //  this.stderr.pipe(process.stderr);
+  //});
 });
 

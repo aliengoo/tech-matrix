@@ -3,17 +3,13 @@
     ".git", "node_modules", "client", "public", "gulpfile.js", ".things", ".idea"
   ],
   "verbose": true,
-  "stdout": false,
   "execMap": {
     "js": "node --harmony --debug"
   },
-  "script": "server/index.js",
   "watch": [
     "server"
   ],
   "env": {
-    "LDAP_URI": "ldap://teachers-group.co.uk:389",
-    "LDAP_BASE_DSN": "DC=teachers-group,DC=co,DC=uk",
     "NODE_ENV": "development"
   },
   "ext": "js"

@@ -7,8 +7,8 @@ const BaseUrl = "/api/registration";
 
 export default class RegistrationApi {
 
-  isUsernameTaken(username) {
-    return axios.get(`${BaseUrl}`, {
+  doesUsernameExist(username) {
+    return axios.get(`${BaseUrl}/does-username-exist`, {
       params: {username}
     });
   }

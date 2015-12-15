@@ -8,6 +8,9 @@ class UserAdapter {
     this.models = models;
     this._comparePassword = this._comparePassword.bind(this);
     this._hashPassword = this._hashPassword.bind(this);
+    this.findByUsername = this.findByUsername.bind(this);
+    this.normalizeUsername = this.normalizeUsername.bind(this);
+    this.doesUsernameExist = this.doesUsernameExist.bind(this);
   }
 
   _comparePassword(password, passwordHash) {
@@ -53,6 +56,18 @@ class UserAdapter {
     });
   }
 
+  doesUsernameExist(username) {
+    let d = Q.defer();
+
+    this.models.User.count({
+      where: {
+        username
+      }
+    }).then(count => d.resolve(count > 0));
+
+    return d.promise;
+  }
+
   authenticate(credentials) {
     let d = Q.defer();
 
@@ -84,10 +99,42 @@ class UserAdapter {
     return d.promise;
   }
 
+  normalizeUsername(username) {
+    return username.trim().toLocaleLowerCase();
+  }
+
   create(credentials) {
-    return this.models.User.create({
-      ...credentials,
-      accountLocked: false
+    let self = this;
+
+    let d = Q.defer();
+
+    credentials.username = this.normalizeUsername(credentials.username);
+
+    self.doesUsernameExist(credentials.username).then((exists) => {
+      if (exists) {
+        d.reject({
+          success: false,
+          error: `Cannot create account because the username '${credentials.username}' is already taken.`
+        });
+      } else {
+
+        const newUser = {
+          username: credentials.username,
+          passwordHash: undefined
+        };
+
+        self._hashPassword(credentials.password).then((passwordHash) => {
+          newUser.passwordHash = passwordHash;
+
+          self.models.User.create(newUser).then(
+            user => d.resolve(user),
+            error => d.reject(error));
+        });
+      }
     });
+
+    return d.promise;
   }
 }
+
+module.exports = UserAdapter;

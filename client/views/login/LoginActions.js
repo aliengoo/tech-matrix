@@ -8,8 +8,6 @@ import AuthenticationApi from '../../common/AuthenticationApi';
 class LoginActions {
 
   constructor() {
-    super();
-
     this.authenticationApi = new AuthenticationApi();
   }
 

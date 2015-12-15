@@ -4,6 +4,7 @@ let express = require('express');
 let bodyParser = require('body-parser');
 let morgan = require('morgan');
 let config = require('./config/config');
+let validator = require('express-validator');
 
 let app = express();
 
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+app.use(validator());
 app.use(morgan('dev'));
 app.set('secret', config.secret);
 
@@ -24,6 +26,7 @@ app.use(require('./middleware/authenticateMiddleware'));
 
 // api
 app.use(require('./routes/authenticationRouter'));
+app.use(require('./routes/registrationRouter'));
 app.use(require('./routes/productRouter'));
 app.use(require('./routes/vendorRouter'));
 
