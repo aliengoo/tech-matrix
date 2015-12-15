@@ -52,30 +52,37 @@ export default class RegistrationView extends Component {
   }
 
   render() {
-    const {username, password, fetching, formState, exists} = this.props;
+    const {username, password, fetching, validityState, exists} = this.props;
     let conflictErrorBlock = (<ErrorBlock hasError={exists}>Username already in use</ErrorBlock>);
+    console.log("");
 
-    const disabled = exists || fetching || !_.get(formState, 'valid', false);
+    const disabled = exists || fetching || !_.get(validityState, 'valid', false);
 
     return (
       <div className="container">
-        <div className="col-lg-offset-4 col-lg-4">
+        <div className="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
 
           <header>
             <h1>Registration</h1>
           </header>
 
           <Form name="loginForm" onFormStateUpdated={formState => RegistrationActions.setFormState(formState)}>
-            <UsernameInput onChange={username => this.setField({username})} defaultValue={username}>
+            <UsernameInput
+              onChange={username => this.setField({username})}
+              defaultValue={username}
+              placeholder={"e.g. fred@google.com"}
+              label={"Email"}
+              type={"email"}>
               {conflictErrorBlock}
             </UsernameInput>
             <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
             <button
-              className="btn btn-primary btn"
+              className="btn btn-primary pull-right"
               type="button"
               disabled={disabled}
               onClick={() => RegistrationActions.register(username, password)}>Register
             </button>
+            <div className="clearfix"></div>
           </Form>
         </div>
       </div>

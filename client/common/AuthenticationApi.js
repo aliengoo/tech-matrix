@@ -1,23 +1,22 @@
 import axios from 'axios';
 import store from 'store';
 
-const BaseUrl = "/api/authentication";
 const TokenKey = "auth_token";
 
 export default class AuthenticationApi {
 
   authenticate(username, password) {
-    return axios.post(`${BaseUrl}/authenticate`, {
+    return axios.post(`/api//authenticate`, {
       username, password
     });
   }
 
   logout() {
-    return axios.post(`${BaseUrl}/auth/logout`);
+    return axios.post(`/api/auth/authentication/logout`);
   }
 
   verify() {
-    return axios.get(`${BaseUrl}/auth/verify`);
+    return axios.get(`/api/auth/authentication/verify`);
   }
 
   getToken() {

@@ -19,14 +19,15 @@ export default class UsernameInput extends Component {
   }
 
   render() {
-    const {defaultValue, children} = this.props;
+    const {defaultValue, children, label, type, placeholder} = this.props;
 
     return (
       <div>
         <FormGroup>
-          <Label>Username</Label>
+          <Label>{label}</Label>
           <input
-            type="text"
+            type={type}
+            placeholder={placeholder}
             className="form-control"
             required
             defaultValue={defaultValue}
@@ -56,7 +57,16 @@ export default class UsernameInput extends Component {
   }
 }
 
+UsernameInput.defaultProps = {
+  label: "Username",
+  type: "text",
+  placeholder: ""
+};
+
 UsernameInput.propTypes = {
+  placeholder: PropTypes.string,
   defaultValue: PropTypes.string,
+  label: PropTypes.string,
+  text: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };

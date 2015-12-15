@@ -23,6 +23,6 @@ axios.interceptors.response
     return response.data;
   }, response => {
     console.error(`!API-> ${response.status} - ${response.statusText}:`, response.data);
-    return response.data;
+    return Q.reject(response);
   });
 
