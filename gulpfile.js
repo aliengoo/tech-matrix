@@ -7,7 +7,6 @@ var babelify = require('babelify');
 var watchify = require('watchify');
 var path = require('path');
 var source = require('vinyl-source-stream');
-//var notifier = require('node-notifier');
 var WindowsToaster = require('node-notifier').WindowsToaster;
 var notifier = new WindowsToaster({
   withFallback: true
@@ -15,7 +14,8 @@ var notifier = new WindowsToaster({
 
 gulp.task('vendor:css', function () {
   var src = [
-    'node_modules/react-select/dist/react-select.css'
+    'node_modules/react-select/dist/react-select.css',
+    'node_modules/animate.css/animate.css'
   ];
 
   return gulp.src(src)
@@ -84,7 +84,7 @@ gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
     start: true
   });
   gulp.watch(['client/**/*.js', 'client/**/*.jsx'], ["build:js"]);
-  gulp.watch('client/**/*.css', ["build:css"]);
+  gulp.watch('client/**/*.scss', ["build:css"]);
 
   //lp.nodemon().on('readable', function () {
   //  this.stdout.on('data', function (chunk) {

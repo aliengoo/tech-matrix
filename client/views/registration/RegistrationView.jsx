@@ -1,5 +1,7 @@
 import _ from 'lodash';
+
 import connectToStores from 'alt/utils/connectToStores';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import React, {Component, PropTypes} from 'react';
 import Form from '../_components/Form.jsx';
 import UsernameInput from '../_components/UsernameInput.jsx'
@@ -34,7 +36,7 @@ export default class RegistrationView extends Component {
       var isSuccessful = _.get(state, 'success', false);
 
       if (isSuccessful) {
-        self.props.history.pushState(null, 'login');
+        self.props.history.push(null, 'login');
       }
     });
   }
@@ -44,19 +46,22 @@ export default class RegistrationView extends Component {
   }
 
   setField(field) {
+    const {formState} = this.props;
     RegistrationActions.setField(field);
 
-    if (field.username) {
+    console.log(formState);
+
+    let hasValidUsername = !_.get(formState, "UsernameInput.typeMismatch", false);
+
+    if (field.username && hasValidUsername) {
       RegistrationActions.doesUsernameExist(field.username);
     }
   }
 
   render() {
-    const {username, password, fetching, validityState, exists} = this.props;
-    let conflictErrorBlock = (<ErrorBlock hasError={exists}>Username already in use</ErrorBlock>);
-    console.log("");
+    const {username, password, fetching, formState, exists} = this.props;
 
-    const disabled = exists || fetching || !_.get(validityState, 'valid', false);
+    const disabled = exists || fetching || !_.get(formState, 'valid', false);
 
     return (
       <div className="container">
@@ -73,7 +78,8 @@ export default class RegistrationView extends Component {
               placeholder={"e.g. fred@google.com"}
               label={"Email"}
               type={"email"}>
-              {conflictErrorBlock}
+              {this.renderConflictErrorBlock()}
+              {this.renderInvalidEmailErrorBlock()}
             </UsernameInput>
             <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
             <button
@@ -87,6 +93,15 @@ export default class RegistrationView extends Component {
         </div>
       </div>
     );
+  }
+
+  renderInvalidEmailErrorBlock() {
+    const typeMismatch = _.get(this.props.formState, 'UsernameInput.typeMismatch', false);
+    return !typeMismatch ? (<ErrorBlock>Not a valid email address</ErrorBlock>) : <div></div>;
+  }
+
+  renderConflictErrorBlock() {
+    return this.props.exists ? (<ErrorBlock>Username already in use</ErrorBlock>) : <div></div>;
   }
 }
 
