@@ -32,7 +32,7 @@ Object.keys(db).forEach(function (modelName) {
   }
 });
 
-var options = {force: false};
+var options = {force: true};
 
 sequelize.sync(options);
 

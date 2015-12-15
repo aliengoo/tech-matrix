@@ -36,7 +36,7 @@ router.get('/api/registration/does-username-exist', (req, res) => {
   if (errors) {
     res.status(400).json({
       success: false,
-      error: util.inspect(errors)
+      error: errors
     });
   } else {
     userAdapter.doesUsernameExist(req.query.username).then((exists) => {

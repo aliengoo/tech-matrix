@@ -36,6 +36,7 @@ export default class UsernameInput extends Component {
             id={this.componentName}
             maxLength={MaxLength}
             onChange={this.onChange}/>
+          {this.renderTypeMismatchErrorBlock()}
           {this.renderRequiredErrorBlock()}
           {this.renderTooLongErrorBlock()}
           {children}
@@ -44,16 +45,22 @@ export default class UsernameInput extends Component {
     );
   }
 
+  renderTypeMismatchErrorBlock() {
+    const {validityState} = this.props;
+    const typeMismatch = _.get(validityState, 'typeMismatch', false);
+    return typeMismatch ? (<ErrorBlock>Not a valid email address</ErrorBlock>) : <div></div>;
+  }
+
   renderRequiredErrorBlock() {
     const {validityState} = this.props;
     var valueMissing = _.get(validityState, "valueMissing", false);
-    return (<ErrorBlock hasError={valueMissing}>Username is required</ErrorBlock>);
+    return valueMissing ? (<ErrorBlock>Username is required</ErrorBlock>) : <div></div>;
   }
 
   renderTooLongErrorBlock() {
     const {validityState} = this.props;
     var tooLong = _.get(validityState, "tooLong", false);
-    return (<ErrorBlock hasError={tooLong}>Username can be a maximum of {MaxLength} characters</ErrorBlock>);
+    return tooLong ? (<ErrorBlock>Username can be a maximum of {MaxLength} characters</ErrorBlock>) : <div></div>;
   }
 }
 

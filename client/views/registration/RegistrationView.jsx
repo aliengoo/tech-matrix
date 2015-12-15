@@ -79,7 +79,6 @@ export default class RegistrationView extends Component {
               label={"Email"}
               type={"email"}>
               {this.renderConflictErrorBlock()}
-              {this.renderInvalidEmailErrorBlock()}
             </UsernameInput>
             <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
             <button
@@ -95,10 +94,6 @@ export default class RegistrationView extends Component {
     );
   }
 
-  renderInvalidEmailErrorBlock() {
-    const typeMismatch = _.get(this.props.formState, 'UsernameInput.typeMismatch', false);
-    return !typeMismatch ? (<ErrorBlock>Not a valid email address</ErrorBlock>) : <div></div>;
-  }
 
   renderConflictErrorBlock() {
     return this.props.exists ? (<ErrorBlock>Username already in use</ErrorBlock>) : <div></div>;

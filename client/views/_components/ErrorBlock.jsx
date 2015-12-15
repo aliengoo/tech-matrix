@@ -8,7 +8,7 @@ export default class ErrorBlock extends Component {
   componentDidMount() {
     let node = ReactDOM.findDOMNode(this);
 
-    TweenMax.from(node, 1, {opacity: 0, y: "-10"});
+    TweenMax.from(node, .5, {opacity: 0, y: "-10"});
   }
 
   render() {
