@@ -10,12 +10,7 @@ export default class TestView extends Component {
               Test
             </h1>
           </header>
-
-          <button className="btn btn-primary" onClick={() => {this.props.history.pushState(null, '/login')}}>Go to login</button>
-
         </div>
-
-
       </div>
     );
   }
