@@ -13,7 +13,7 @@ export default class LoginView extends Component {
 
   constructor(props) {
     super(props);
-    this.setField = _.debounce(this.setField).bind(this);
+    this.setField = _.debounce(this.setField, 500).bind(this);
   }
 
   static getStores() {
@@ -32,8 +32,13 @@ export default class LoginView extends Component {
   }
 
   componentDidMount() {
-    this.appStoreListener = AppStore.listen((state) => {
-      console.log(state);
+    let self = this;
+    self.appStoreListener = AppStore.listen((state) => {
+      if (state.isAuthenticated) {
+        setTimeout(() => {
+          self.props.history.pushState(null, 'products');
+        }, 1);
+      }
     });
   }
 
@@ -43,6 +48,7 @@ export default class LoginView extends Component {
 
   render() {
     const {username, password, fetching, formState, history} = this.props;
+
     return (
       <div className="container">
         <div className="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
@@ -61,7 +67,7 @@ export default class LoginView extends Component {
               className="btn btn-primary btn pull-right"
               type="button"
               disabled={fetching || !formState.valid}
-              onClick={() => LoginActions.login({username, password})}>Login
+              onClick={() => LoginActions.login(username, password)}>Login
             </button>
             <div className="clearfix"></div>
           </Form>

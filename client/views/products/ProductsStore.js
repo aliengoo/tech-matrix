@@ -1,4 +1,5 @@
 import alt from '../../alt';
+import AppActions from '../AppActions';
 import ProductsActions from './ProductsActions';
 
 class ProductsStore {
@@ -22,66 +23,7 @@ class ProductsStore {
     };
   }
 
-  onFetchPeopleNames() {
-    this.setState({
-      fetching: true
-    });
-  }
 
-  onFetchPeopleNamesComplete(peopleNames) {
-    this.setState({
-      peopleNames,
-      fetching: false
-    });
-  }
-
-  onFetchPeopleNamesFailed(error) {
-    this.setState({
-      error,
-      peopleNames: [],
-      fetching: false
-    });
-  }
-
-  onFetchVendorNames() {
-    this.setState({
-      fetching: true
-    });
-  }
-
-  onFetchVendorNamesComplete(vendorNames) {
-    this.setState({
-      vendorNames,
-      fetching: false
-    });
-  }
-
-  onFetchVendorNamesFailed(error) {
-    this.setState({
-      error,
-      vendorNames: []
-    });
-  }
-
-  onFilterProducts() {
-    this.setState({
-      fetching: true
-    });
-  }
-
-  onFilterProductsComplete(results) {
-    this.setState({
-      fetching: false,
-      products: results
-    });
-  }
-
-  onFilterProductsFailed(error) {
-    this.setState({
-      fetching: false,
-      error
-    });
-  }
 }
 
 export default alt.createStore(ProductsStore);

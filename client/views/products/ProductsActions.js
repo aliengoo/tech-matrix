@@ -1,9 +1,15 @@
 import alt from '../../alt';
-import axios from 'axios';
-import _ from 'lodash';
+import AppActions from '../AppActions';
 
 class ProductsActions {
 
+  runFilter(filter) {
+    AppActions.fetchStarted();
+
+    this.dispatch();
+
+
+  }
 }
 
 export default alt.createActions(ProductsActions);

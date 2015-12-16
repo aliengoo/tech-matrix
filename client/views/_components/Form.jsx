@@ -47,6 +47,10 @@ export default class Form extends Component {
 
     let form = document.querySelector(`[name="${name}"]`);
 
+    _.forEach(form.querySelectorAll('input, select, textarea'), (el) => {
+      this.evaluateValidity(el);
+    });
+
     this.formObservable = Rx.Observable.fromEvent(form, 'keyup')
       .debounce(debounce)
       .map(ev => ev.target)

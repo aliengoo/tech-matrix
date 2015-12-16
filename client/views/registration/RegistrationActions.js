@@ -21,10 +21,8 @@ class RegistrationActions {
     AppActions.fetchStarted();
     this.dispatch();
 
-    return registrationApi.doesUsernameExist(username).then((responseData) => {
-      console.log("responseData", responseData);
-      this.actions.doesUsernameExistComplete(responseData);
-    },
+    return registrationApi.doesUsernameExist(username).then(
+      this.actions.doesUsernameExistComplete,
       this.actions.doesUsernameExistFailed);
   }
 

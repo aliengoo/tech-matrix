@@ -11,12 +11,13 @@ import RegistrationStore from './RegistrationStore';
 import AppActions from '../AppActions';
 import AppStore from '../AppStore';
 import ErrorBlock from '../_components/ErrorBlock.jsx';
+import ErrorPanel from '../_components/ErrorPanel.jsx';
 
 export default class RegistrationView extends Component {
 
   constructor(props) {
     super(props);
-    this.setField = _.debounce(this.setField, 1000).bind(this);
+    this.setField = _.debounce(this.setField, 500).bind(this);
   }
 
   static getStores() {
@@ -36,7 +37,10 @@ export default class RegistrationView extends Component {
       var isSuccessful = _.get(state, 'success', false);
 
       if (isSuccessful) {
-        self.props.history.push(null, 'login');
+        // prevents dispatcher invocation in another dispatch
+        setTimeout(() => {
+          self.props.history.pushState(null, 'login');
+        }, 1);
       }
     });
   }
@@ -49,8 +53,6 @@ export default class RegistrationView extends Component {
     const {formState} = this.props;
     RegistrationActions.setField(field);
 
-    console.log(formState);
-
     let hasValidUsername = !_.get(formState, "UsernameInput.typeMismatch", false);
 
     if (field.username && hasValidUsername) {
@@ -59,7 +61,7 @@ export default class RegistrationView extends Component {
   }
 
   render() {
-    const {username, password, fetching, formState, exists} = this.props;
+    const {username, password, fetching, formState, exists, error} = this.props;
 
     const disabled = exists || fetching || !_.get(formState, 'valid', false);
 
@@ -78,7 +80,7 @@ export default class RegistrationView extends Component {
               placeholder={"e.g. fred@google.com"}
               label={"Email"}
               type={"email"}>
-              {this.renderConflictErrorBlock()}
+              {this.renderUsernameConflictErrorBlock()}
             </UsernameInput>
             <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
             <button
@@ -89,13 +91,21 @@ export default class RegistrationView extends Component {
             </button>
             <div className="clearfix"></div>
           </Form>
+          {this.renderError(error)}
         </div>
       </div>
     );
   }
 
+  renderError(error) {
+    if (error) {
+      return (<ErrorPanel error={error}/>);
+    }
 
-  renderConflictErrorBlock() {
+    return <div></div>;
+  }
+
+  renderUsernameConflictErrorBlock() {
     return this.props.exists ? (<ErrorBlock>Username already in use</ErrorBlock>) : <div></div>;
   }
 }

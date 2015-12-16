@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import ReactDOM from 'react-dom';
 import React, {Component, PropTypes} from 'react';
 import FormGroup from './FormGroup.jsx';
 import Label from './Label.jsx';
@@ -10,7 +11,7 @@ export default class UsernameInput extends Component {
 
   constructor(props) {
     super(props);
-    this.onChange = _.debounce(this.onChange).bind(this);
+    this.onChange = _.debounce(this.onChange, 500).bind(this);
     this.componentName = this.constructor.name;
   }
 

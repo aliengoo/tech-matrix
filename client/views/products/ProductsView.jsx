@@ -2,6 +2,7 @@ import connectToStores from 'alt/utils/connectToStores';
 import React, {Component} from 'react';
 import ProductsFilter from './_components/ProductsFilter.jsx';
 import ProductsTable from './_components/ProductsTable.jsx';
+import AppStore from '../AppStore';
 import ProductsStore from './ProductsStore';
 import ProductsActions from './ProductsActions';
 
@@ -13,21 +14,18 @@ class ProductsView extends Component {
   }
 
   static getStores() {
-    return [ProductsStore];
+    return [AppStore, ProductsStore];
   }
 
   static getPropsFromStores() {
-    return ProductsStore.getState();
+    return Object.assign({}, AppStore.getState(), ProductsStore.getState());
   }
 
   componentDidMount() {
-    ProductsActions.fetchPeopleNames();
-    ProductsActions.fetchVendorNames();
-    ProductsActions.filterProducts("");
   }
 
   onSearch(filter) {
-    ProductsActions.filterProducts(filter);
+
   }
 
   render() {
@@ -39,10 +37,10 @@ class ProductsView extends Component {
           <header className="row">
             <h1>Products</h1>
           </header>
-          <div className="row">
+          <div className="col-lg-3 col-md-4">
             <ProductsFilter onSearch={this.onSearch} fetching={fetching}/>
           </div>
-          <div className="row">
+          <div className="col-lg-9 col-md-8">
             <ProductsTable fetching={fetching} products={products}/>
           </div>
         </div>

@@ -4,12 +4,9 @@ import _ from 'lodash';
 import AppActions from '../AppActions';
 
 import AuthenticationApi from '../../common/AuthenticationApi';
+let authenticationApi = new AuthenticationApi();
 
 class LoginActions {
-
-  constructor() {
-    this.authenticationApi = new AuthenticationApi();
-  }
 
   setFormState(formState) {
     this.dispatch(formState);
@@ -23,17 +20,17 @@ class LoginActions {
     this.dispatch();
 
     // clear the current token
-    this.authenticationApi.setToken();
+    authenticationApi.setToken();
 
     // notify at application level we are fetching
     AppActions.fetchStarted();
 
-    this.authenticationApi.authenticate(username, password)
+    authenticationApi.authenticate(username, password)
       .then((result) => {
 
         if (result.success) {
           // set the token in localStorage
-          this.authenticationApi.setToken(result.token);
+          authenticationApi.setToken(result.token);
 
           // assign the username to the AppStore
           AppActions.successfulAuthentication(result.username);

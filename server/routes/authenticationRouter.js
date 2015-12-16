@@ -3,12 +3,13 @@
 let router = require('express').Router();
 
 let config = require('../config/config');
-let authenticate = require('../ldap/ldapAuthenticate');
 let jwt = require('jsonwebtoken');
 let models = require('../pg-db/models');
 let TokenAdapter = require('../pg-db/adapters/TokenAdapter');
+let UserAdapter = require('../pg-db/adapters/UserAdapter');
 
 let tokenAdapter = new TokenAdapter(models);
+let userAdapter = new UserAdapter(models);
 
 router.post('/api/auth/logout', (req, res) => {
   tokenAdapter.destroy(req.token)
@@ -27,8 +28,7 @@ router.post('/api/authenticate', (req, res) => {
     return;
   }
 
-  authenticate(req.body.username, req.body.password)
-    .then(() => {
+  userAdapter.authenticate(req.body).then(() => {
       let token = jwt.sign({
         username: req.body.username
       }, config.token.secret, {
@@ -39,15 +39,12 @@ router.post('/api/authenticate', (req, res) => {
         res.json({
           success: true,
           message: `Hello, ${req.body.username}`,
+          username: req.body.username,
           token
         });
       }).catch(error => res.status(500).send(error));
-    })
-    .catch(() => {
-      res.status(401).json({
-        success: false,
-        message: "invalid username or password"
-      });
+    }, (error) => {
+      res.status(401).json(error);
     });
 });
 

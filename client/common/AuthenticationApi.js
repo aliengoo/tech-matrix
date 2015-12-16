@@ -6,9 +6,12 @@ const TokenKey = "auth_token";
 export default class AuthenticationApi {
 
   authenticate(username, password) {
-    return axios.post(`/api//authenticate`, {
+    let data = {
       username, password
-    });
+    };
+    console.log(data);
+
+    return axios.post(`/api/authenticate`, data);
   }
 
   logout() {
