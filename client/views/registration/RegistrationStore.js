@@ -18,7 +18,7 @@ class RegistrationStore {
   }
 
   onSetField(field) {
-    var newState = Object.assign({}, field, {exists: false, success: false});
+    var newState = Object.assign({}, field, {success: false});
     this.setState(newState);
   }
 

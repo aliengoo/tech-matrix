@@ -2,7 +2,11 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import FormGroup from './FormGroup.jsx';
 import Label from './Label.jsx';
-import ErrorBlock from './ErrorBlock.jsx';
+import Errors from './Errors.jsx';
+
+const Debounce = 1000;
+const MaxLength = 60;
+const MinLength = 8;
 
 export default class PasswordInput extends Component {
 
@@ -10,6 +14,11 @@ export default class PasswordInput extends Component {
     super(props);
     this.onChange = _.debounce(this.onChange, props.debounce).bind(this);
     this.componentName = this.constructor.name;
+    this.ErrorMessagesMap = {
+      valueMissing: "Password is required",
+      tooShort: `Password should be a minimum of ${this.props.minLength} characters`,
+      tooLong: `Password should be a maximum of ${this.props.maxLength} characters`
+    };
   }
 
   onChange() {
@@ -17,7 +26,7 @@ export default class PasswordInput extends Component {
   }
 
   render() {
-    const {defaultValue, children, minLength, maxLength} = this.props;
+    const {defaultValue, minLength, maxLength, validityState} = this.props;
     return (
       <div>
         <FormGroup>
@@ -33,38 +42,17 @@ export default class PasswordInput extends Component {
             name={this.componentName}
             id={this.componentName}
             onChange={this.onChange}/>
-          {this.renderTooLongErrorBlock()}
-          {this.renderTooShortErrorBlock()}
-          {this.renderValueMissingErrorBlock()}
-          {children}
+          <Errors validityState={validityState} errorMessagesMap={this.ErrorMessagesMap}/>
         </FormGroup>
       </div>
     );
   }
-
-  renderTooShortErrorBlock() {
-    const {validityState, minLength} = this.props;
-
-    return _.get(validityState, "tooShort", false) ? (<ErrorBlock>{`Password is too short (min ${minLength} characters)`}</ErrorBlock>) : <div></div>;
-  }
-
-  renderTooLongErrorBlock() {
-    const {validityState, maxLength} = this.props;
-
-    return _.get(validityState, "tooLong", false) ? (<ErrorBlock>{`Password is too long (min ${minLength} characters)`}</ErrorBlock>) : <div></div>;
-  }
-
-  renderValueMissingErrorBlock() {
-    const {validityState} = this.props;
-
-    return _.get(validityState, "valueMissing", false) ? (<ErrorBlock>{`Password is required`}</ErrorBlock>) : <div></div>;
-  }
 }
 
 PasswordInput.defaultProps = {
-  debounce: 1000,
-  minLength: 8,
-  maxLength: 50
+  debounce: Debounce,
+  minLength: MinLength,
+  maxLength: MaxLength
 };
 
 PasswordInput.propTypes = {

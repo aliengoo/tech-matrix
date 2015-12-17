@@ -10,14 +10,14 @@ import RegistrationActions from './RegistrationActions';
 import RegistrationStore from './RegistrationStore';
 import AppActions from '../AppActions';
 import AppStore from '../AppStore';
-import ErrorBlock from '../_components/ErrorBlock.jsx';
+import Errors from '../_components/Errors.jsx';
 import ErrorPanel from '../_components/ErrorPanel.jsx';
 
 export default class RegistrationView extends Component {
 
   constructor(props) {
     super(props);
-    this.setField = _.debounce(this.setField, 500).bind(this);
+    this.setField = this.setField.bind(this);
   }
 
   static getStores() {
@@ -77,11 +77,14 @@ export default class RegistrationView extends Component {
             <UsernameInput
               onChange={username => this.setField({username})}
               defaultValue={username}
+              customValidityState={{
+                 conflict: exists
+                }}
+              customErrorMessagesMap={
+                {conflict: "Username already in use"}
+              }
               placeholder={"e.g. fred@google.com"}
-              label={"Email"}
-              type={"email"}>
-              {this.renderUsernameConflictErrorBlock()}
-            </UsernameInput>
+              label={"Email"}/>
             <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
             <button
               className="btn btn-primary pull-right"
@@ -91,22 +94,9 @@ export default class RegistrationView extends Component {
             </button>
             <div className="clearfix"></div>
           </Form>
-          {this.renderError(error)}
         </div>
       </div>
     );
-  }
-
-  renderError(error) {
-    if (error) {
-      return (<ErrorPanel error={error}/>);
-    }
-
-    return <div></div>;
-  }
-
-  renderUsernameConflictErrorBlock() {
-    return this.props.exists ? (<ErrorBlock>Username already in use</ErrorBlock>) : <div></div>;
   }
 }
 

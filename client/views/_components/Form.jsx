@@ -60,7 +60,6 @@ export default class Form extends Component {
   renderChildren() {
     let self = this;
     return React.Children.map(self.props.children, function (child) {
-
       if (!child.type.name) {
         return child;
       }

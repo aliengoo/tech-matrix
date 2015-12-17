@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import React, {Component, PropTypes} from 'react';
 import FormGroup from './FormGroup.jsx';
 import Label from './Label.jsx';
-import ErrorBlock from './ErrorBlock.jsx';
+import Errors from './Errors.jsx';
 
 const MaxLength = 50;
 
@@ -11,8 +11,13 @@ export default class UsernameInput extends Component {
 
   constructor(props) {
     super(props);
-    this.onChange = _.debounce(this.onChange, 500).bind(this);
+    this.onChange = _.debounce(this.onChange, this.props.debounce).bind(this);
     this.componentName = this.constructor.name;
+    this.ErrorMessagesMap = {
+      valueMissing: "Username is required",
+      tooLong: `Username has a maximum length of ${this.props.maxLength} characters`,
+      typeMismatch: `Username expected and email`
+    };
   }
 
   onChange() {
@@ -20,14 +25,22 @@ export default class UsernameInput extends Component {
   }
 
   render() {
-    const {defaultValue, children, label, type, placeholder} = this.props;
+    const {
+      defaultValue,
+      label,
+      placeholder,
+      maxLength,
+      validityState,
+      customValidityState,
+      customErrorMessagesMap
+    } = this.props;
 
     return (
       <div>
         <FormGroup>
           <Label>{label}</Label>
           <input
-            type={type}
+            type="email"
             placeholder={placeholder}
             className="form-control"
             required
@@ -35,46 +48,30 @@ export default class UsernameInput extends Component {
             ref={this.componentName}
             name={this.componentName}
             id={this.componentName}
-            maxLength={MaxLength}
+            maxLength={maxLength}
             onChange={this.onChange}/>
-          {this.renderTypeMismatchErrorBlock()}
-          {this.renderRequiredErrorBlock()}
-          {this.renderTooLongErrorBlock()}
-          {children}
+          <Errors validityState={validityState} errorMessagesMap={this.ErrorMessagesMap}/>
+          <Errors validityState={customValidityState} errorMessagesMap={customErrorMessagesMap}/>
         </FormGroup>
       </div>
     );
-  }
-
-  renderTypeMismatchErrorBlock() {
-    const {validityState} = this.props;
-    const typeMismatch = _.get(validityState, 'typeMismatch', false);
-    return typeMismatch ? (<ErrorBlock>Not a valid email address</ErrorBlock>) : <div></div>;
-  }
-
-  renderRequiredErrorBlock() {
-    const {validityState} = this.props;
-    var valueMissing = _.get(validityState, "valueMissing", false);
-    return valueMissing ? (<ErrorBlock>Username is required</ErrorBlock>) : <div></div>;
-  }
-
-  renderTooLongErrorBlock() {
-    const {validityState} = this.props;
-    var tooLong = _.get(validityState, "tooLong", false);
-    return tooLong ? (<ErrorBlock>Username can be a maximum of {MaxLength} characters</ErrorBlock>) : <div></div>;
   }
 }
 
 UsernameInput.defaultProps = {
   label: "Username",
-  type: "text",
-  placeholder: ""
+  placeholder: "",
+  debounce: 500,
+  maxLength: MaxLength
 };
 
 UsernameInput.propTypes = {
+  debounce: PropTypes.number,
+  maxLength: PropTypes.number,
   placeholder: PropTypes.string,
+  customValidityState: PropTypes.object,
+  customErrorMessagesMap: PropTypes.object,
   defaultValue: PropTypes.string,
   label: PropTypes.string,
-  text: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
