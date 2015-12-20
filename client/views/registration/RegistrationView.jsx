@@ -4,9 +4,7 @@ import connectToStores from 'alt/utils/connectToStores';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import React, {Component, PropTypes} from 'react';
 import Form from '../_components/Form.jsx';
-import ValidatedInput from '../_components/ValidatedInput.jsx';
-import UsernameInput from '../_components/UsernameInput.jsx'
-import PasswordInput from '../_components/PasswordInput.jsx'
+import FormGroupInput from '../_components/FormGroupInput.jsx';
 import RegistrationActions from './RegistrationActions';
 import RegistrationStore from './RegistrationStore';
 import AppActions from '../AppActions';
@@ -18,7 +16,7 @@ export default class RegistrationView extends Component {
 
   constructor(props) {
     super(props);
-    this.elementStateListener = this.elementStateListener.bind(this);
+    this.elementStateChanged = this.elementStateChanged.bind(this);
   }
 
   static getStores() {
@@ -51,7 +49,11 @@ export default class RegistrationView extends Component {
   }
 
 
-  elementStateListener(elementState) {
+  elementStateChanged(elementState) {
+    if (!elementState) {
+      return;
+    }
+
     RegistrationActions.setElementState(elementState);
 
     if (elementState.name === "username" && elementState.valid) {
@@ -74,8 +76,8 @@ export default class RegistrationView extends Component {
 
           <Form name="loginForm">
 
-            <ValidatedInput
-              elementStateListener={this.elementStateListener}
+            <FormGroupInput
+              elementStateChanged={this.elementStateChanged}
               defaultValue={username}
               required={true}
               minLength={3}
@@ -90,10 +92,10 @@ export default class RegistrationView extends Component {
               placeholder="e.g. fred@blogs.net"
               type="email"/>
 
-            <ValidatedInput
-              elementStateListener={this.elementStateListener}
-              pattern={"^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!#$%&? \"]).*$"}
-              defaultValue={username}
+            <FormGroupInput
+              elementStateChanged={this.elementStateChanged}
+              pattern={/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/}
+              defaultValue={password}
               required={true}
               minLength={3}
               errorMessagesMap={{
@@ -101,7 +103,6 @@ export default class RegistrationView extends Component {
               }}
               name="password"
               label="Password"
-              placeholder="e.g. fred@blogs.net"
               type="password"/>
 
             <button

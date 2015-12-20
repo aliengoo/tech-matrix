@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import connectToStores from 'alt/utils/connectToStores';
 import React, {Component, PropTypes} from 'react';
-import ValidatedInput from '../_components/ValidatedInput.jsx';
 import ElementStateCollection from '../_common/ElementStateCollection';
 
 import TestActions from './TestActions';
@@ -41,21 +40,7 @@ class TestView extends Component {
           </header>
 
           <form name="testForm">
-            <ValidatedInput
-              elementStateListener={this.elementStateListener}
-              required={true}
-              minLength={3}
-              name="Username"
-              label="Username"
-              type="email"/>
 
-            <ValidatedInput
-              elementStateListener={this.elementStateListener}
-              minLength={8}
-              required={true}
-              name="Password"
-              label="Password"
-              type="password"/>
 
             <button type="button" className="btn btn-primary" disabled={disabled}>Do something</button>
           </form>

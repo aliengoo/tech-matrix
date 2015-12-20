@@ -9,6 +9,9 @@ export default class ElementStateCollection {
 
 
   setElementState(elementState) {
+    if (!elementState) {
+      return;
+    }
     this._elementStates = Object.assign({}, this._elementStates, {[elementState.name]: elementState});
     this._elementStates.areAllValid = this._areAllValid();
     return this._elementStates;

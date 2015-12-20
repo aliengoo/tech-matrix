@@ -19,6 +19,10 @@ class RegistrationStore {
   }
 
   onSetElementState(elementState) {
+    if (!elementState) {
+      return;
+    }
+
     this.elementStateCollection.setElementState(elementState);
 
     let newState = {

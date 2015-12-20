@@ -8,36 +8,13 @@ import Errors from './Errors.jsx';
 import ElementState from '../_common/ElementState';
 
 const Debounce = 1000;
-const Type = "text";
-const MinLength = 0;
-const MaxLength = 1000;
-const Min = Number.MIN_VALUE;
-const Max = Number.MAX_VALUE;
 
-const SupportedTypes = [
-  "text",
-  "date",
-  "datetime",
-  "datetime-local",
-  "email",
-  "number",
-  "password",
-  "range",
-  "url",
-  "time",
-  "tel"
-];
-
-export default class ValidatedInput extends Component {
+export default class FormGroupInput extends Component {
 
   constructor(props) {
     super(props);
 
-    if (SupportedTypes.indexOf(props.type) === -1) {
-      throw `${props.type} is not a supported input type`;
-    }
-
-    this.ElementState = new ElementState();
+    this.elementState = new ElementState();
     this._onChange = _.debounce(this._onChange, this.props.debounce).bind(this);
     this._getValidityState = this._getValidityState.bind(this);
     this._getErrorMessagesMap = this._getErrorMessagesMap.bind(this);
@@ -58,13 +35,14 @@ export default class ValidatedInput extends Component {
   }
 
   componentDidMount() {
-    let input = this.refs[this.props.name];
-    this.props.elementStateListener(this.ElementState.evaluate(input));
+    this.input = document.querySelector(`[name="${this.props.name}"]`);
+    this.props.elementStateChanged(
+      this.elementState.evaluate(this.input));
   }
 
   _onChange() {
-    this.props.elementStateListener(
-      this.ElementState.evaluate(this.refs[this.props.name]));
+    this.props.elementStateChanged(
+      this.elementState.evaluate(this.input));
   }
 
   _getErrorMessagesMap() {
@@ -73,49 +51,41 @@ export default class ValidatedInput extends Component {
 
   _getValidityState() {
     return Object.assign(
-      _.get(this.ElementState.state, "validity", {}), this.props.customValidityState);
+      _.get(this.elementState.state, "validity", {}), this.props.customValidityState);
+  }
+
+  _parseHtmlAttributes() {
+    const nonHtmlProps = [
+      "elementStateChanged",
+      "debounce",
+      "customValidityState",
+      "errorMessagesMap"
+    ];
+
+    return _.pick(this.props, (value, key) => {
+      return value !== undefined && nonHtmlProps.indexOf(key) === -1;
+    });
   }
 
   render() {
     const {
       children,
-      name,
-      type,
-      minLength,
-      min,
-      max,
-      step,
-      pattern,
-      required,
-      maxLength,
-      label,
-      defaultValue,
-      classes} = this.props;
+      label
+    } = this.props;
 
     const validityState = this._getValidityState();
     const errorMessagesMap = this._getErrorMessagesMap();
+    const attributes = this._parseHtmlAttributes();
 
-    const errors = this.ElementState.state.dirty ?
+    const errors = this.elementState.state.dirty ?
       (<Errors errorMessagesMap={errorMessagesMap} validityState={validityState}/>) : <div></div>;
-
-    var patternRegExp = new RegExp(pattern);
 
     return (
       <FormGroup>
         <Label>{label}</Label>
         <input
-          pattern={!!pattern ? patternRegExp: undefined}
-          className={`form-control ${classes || ""}` }
-          type={type}
-          defaultValue={defaultValue}
-          required={required}
-          minLength={minLength}
-          maxLength={maxLength}
-          min={min}
-          max={max}
-          step={step || "any"}
-          name={name}
-          ref={name}
+          className="form-control"
+          {...attributes}
           onChange={this._onChange}/>
         {errors}
         {children}
@@ -124,32 +94,15 @@ export default class ValidatedInput extends Component {
   }
 }
 
-ValidatedInput.defaultProps = {
-  pattern: "",
-  required: false,
-  debounce: Debounce,
-  type: Type,
-  minLength: MinLength,
-  maxLength: MaxLength,
-  min: Min,
-  max: Max,
-  customValidityState: undefined
+FormGroupInput.defaultProps = {
+  debounce: Debounce
 };
 
-ValidatedInput.propTypes = {
-  pattern: PropTypes.string,
-  classes: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  required: PropTypes.bool,
-  minLength: PropTypes.number,
-  maxLength: PropTypes.number,
-  min: PropTypes.number,
-  max: PropTypes.number,
-  step: PropTypes.number,
+FormGroupInput.propTypes = {
   name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  elementStateChanged: PropTypes.func.isRequired,
   debounce: PropTypes.number,
-  elementStateListener: PropTypes.func.isRequired,
-  type: PropTypes.string,
   customValidityState: PropTypes.object,
   errorMessagesMap: PropTypes.object
 };
