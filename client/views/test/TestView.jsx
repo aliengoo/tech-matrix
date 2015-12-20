@@ -2,7 +2,7 @@ import _ from 'lodash';
 import connectToStores from 'alt/utils/connectToStores';
 import React, {Component, PropTypes} from 'react';
 import ValidatedInput from '../_components/ValidatedInput.jsx';
-import ElementStatesManager from '../_common/ElementStatesManager';
+import ElementStateCollection from '../_common/ElementStateCollection';
 
 import TestActions from './TestActions';
 import TestStore from './TestStore';
@@ -11,7 +11,7 @@ class TestView extends Component {
 
   constructor(props) {
     super(props);
-    this.elementStatesManager = new ElementStatesManager();
+    this.ElementStateCollection = new ElementStateCollection();
     this.elementStateListener = this.elementStateListener.bind(this);
   }
 
@@ -25,11 +25,11 @@ class TestView extends Component {
 
   elementStateListener(elementState) {
     TestActions.setField({[elementState.name]: elementState.value});
-    TestActions.setElementStates(this.elementStatesManager.setElementState(elementState));
+    TestActions.setElementStates(this.ElementStateCollection.setElementState(elementState));
   }
 
   render() {
-    let disabled = !this.elementStatesManager.state.areAllValid;
+    let disabled = !this.ElementStateCollection.state.areAllValid;
 
     return (
       <div className="container">

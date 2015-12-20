@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 
 // for use in container, each element should report to the state manager
-export default class ElementStateManager {
+export default class ElementState {
   constructor() {
     this._elementState = {};
     this.evaluate = this.evaluate.bind(this);
@@ -14,7 +14,7 @@ export default class ElementStateManager {
     }
 
     if (!element.name) {
-      throw "ElementStatesManager.setElement: element.name is required"
+      throw "ElementStateCollection.setElement: element.name is required"
     }
 
     element.checkValidity();
@@ -41,6 +41,7 @@ export default class ElementStateManager {
     currentElementState.validity = element.validity;
     currentElementState.valid = element.validity.valid;
     currentElementState.dirty = valueHistory.length > 1;
+
 
     this._elementState = currentElementState;
 

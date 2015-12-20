@@ -9,12 +9,8 @@ let registrationApi = new RegistrationApi();
 
 class RegistrationActions {
 
-  setField(field) {
-    this.dispatch(field);
-  }
-
-  setFormState(formState) {
-    this.dispatch(formState);
+  setElementState(elementState) {
+    this.dispatch(elementState);
   }
 
   doesUsernameExist(username) {

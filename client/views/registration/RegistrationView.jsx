@@ -4,6 +4,7 @@ import connectToStores from 'alt/utils/connectToStores';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import React, {Component, PropTypes} from 'react';
 import Form from '../_components/Form.jsx';
+import ValidatedInput from '../_components/ValidatedInput.jsx';
 import UsernameInput from '../_components/UsernameInput.jsx'
 import PasswordInput from '../_components/PasswordInput.jsx'
 import RegistrationActions from './RegistrationActions';
@@ -17,7 +18,7 @@ export default class RegistrationView extends Component {
 
   constructor(props) {
     super(props);
-    this.setField = this.setField.bind(this);
+    this.elementStateListener = this.elementStateListener.bind(this);
   }
 
   static getStores() {
@@ -49,21 +50,19 @@ export default class RegistrationView extends Component {
     this.registrationStoreListener();
   }
 
-  setField(field) {
-    const {formState} = this.props;
-    RegistrationActions.setField(field);
 
-    let hasValidUsername = !_.get(formState, "UsernameInput.typeMismatch", false);
+  elementStateListener(elementState) {
+    RegistrationActions.setElementState(elementState);
 
-    if (field.username && hasValidUsername) {
-      RegistrationActions.doesUsernameExist(field.username);
+    if (elementState.name === "username" && elementState.valid) {
+      RegistrationActions.doesUsernameExist(elementState.value);
     }
   }
 
   render() {
-    const {username, password, fetching, formState, exists, error} = this.props;
+    const {username, password, fetching, exists, states, error} = this.props;
 
-    const disabled = exists || fetching || !_.get(formState, 'valid', false);
+    const disabled = exists || fetching || !states.areAllValid;
 
     return (
       <div className="container">
@@ -73,19 +72,38 @@ export default class RegistrationView extends Component {
             <h1>Registration</h1>
           </header>
 
-          <Form name="loginForm" onFormStateUpdated={formState => RegistrationActions.setFormState(formState)}>
-            <UsernameInput
-              onChange={username => this.setField({username})}
+          <Form name="loginForm">
+
+            <ValidatedInput
+              elementStateListener={this.elementStateListener}
               defaultValue={username}
+              required={true}
+              minLength={3}
               customValidityState={{
-                 conflict: exists
-                }}
-              customErrorMessagesMap={
-                {conflict: "Username already in use"}
-              }
-              placeholder={"e.g. fred@google.com"}
-              label={"Email"}/>
-            <PasswordInput onChange={password => this.setField({password})} defaultValue={password}/>
+                exists
+              }}
+              errorMessagesMap={{
+                exists: "Username already in use"
+              }}
+              name="username"
+              label="Username"
+              placeholder="e.g. fred@blogs.net"
+              type="email"/>
+
+            <ValidatedInput
+              elementStateListener={this.elementStateListener}
+              pattern={"^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!#$%&? \"]).*$"}
+              defaultValue={username}
+              required={true}
+              minLength={3}
+              errorMessagesMap={{
+                patternMismatch: "Password does not meet the minimum requirement"
+              }}
+              name="password"
+              label="Password"
+              placeholder="e.g. fred@blogs.net"
+              type="password"/>
+
             <button
               className="btn btn-primary pull-right"
               type="button"

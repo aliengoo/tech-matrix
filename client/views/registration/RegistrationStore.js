@@ -1,31 +1,32 @@
 import alt from '../../alt';
 import AppActions from '../AppActions';
 import RegistrationActions from './RegistrationActions';
+import ElementState from '../_common/ElementState';
+import ElementStateCollection from '../_common/ElementStateCollection';
 
 class RegistrationStore {
   constructor() {
     this.bindActions(RegistrationActions);
+    this.elementStateCollection = new ElementStateCollection();
 
     this.state = {
-      formState: {
-        valid: false
-      },
       username: "",
       password: "",
+      states: this.elementStateCollection,
       exists: false,
       success: false
     };
   }
 
-  onSetField(field) {
-    var newState = Object.assign({}, field, {success: false});
-    this.setState(newState);
-  }
+  onSetElementState(elementState) {
+    this.elementStateCollection.setElementState(elementState);
 
-  onSetFormState(formState) {
-    this.setState({
-      formState
-    });
+    let newState = {
+      states: this.elementStateCollection,
+      [elementState.name]: elementState.value
+    };
+
+    this.setState(newState);
   }
 
   onDoesUsernameExist() {

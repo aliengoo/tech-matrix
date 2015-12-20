@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import FormGroup from './FormGroup.jsx';
 import Label from './Label.jsx';
 import Errors from './Errors.jsx';
-import ElementStateManager from '../_common/ElementStateManager';
+import ElementState from '../_common/ElementState';
 
 const Debounce = 1000;
 const Type = "text";
@@ -20,12 +20,10 @@ const SupportedTypes = [
   "datetime",
   "datetime-local",
   "email",
-  "month",
   "number",
   "password",
   "range",
   "url",
-  "week",
   "time",
   "tel"
 ];
@@ -39,20 +37,15 @@ export default class ValidatedInput extends Component {
       throw `${props.type} is not a supported input type`;
     }
 
-    this.elementStateManager = new ElementStateManager();
+    this.ElementState = new ElementState();
     this._onChange = _.debounce(this._onChange, this.props.debounce).bind(this);
     this._getValidityState = this._getValidityState.bind(this);
     this._getErrorMessagesMap = this._getErrorMessagesMap.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.elementStateListener(this.elementStateManager.evaluate(this.refs[this.props.name]));
-
-    const {label, minLength, maxLength, min, max, step, type} = this.props;
+    const {label, minLength, maxLength, min, max, step, type} = props;
 
     this.DefaultErrorMessagesMap = {
       valueMissing: `${label} is required`,
-      typeMismatch: `${label} expected a type of ${type}`,
+      typeMismatch: `${label} expected a value of type '${type}'`,
       tooShort: `${label} minimum length is ${minLength}`,
       tooLong: `${label} maximum length is ${maxLength}`,
       badInput: `${label} is a bad input`,
@@ -64,9 +57,14 @@ export default class ValidatedInput extends Component {
     };
   }
 
+  componentDidMount() {
+    let input = this.refs[this.props.name];
+    this.props.elementStateListener(this.ElementState.evaluate(input));
+  }
+
   _onChange() {
     this.props.elementStateListener(
-      this.elementStateManager.evaluate(this.refs[this.props.name]));
+      this.ElementState.evaluate(this.refs[this.props.name]));
   }
 
   _getErrorMessagesMap() {
@@ -75,7 +73,7 @@ export default class ValidatedInput extends Component {
 
   _getValidityState() {
     return Object.assign(
-      _.get(this.elementStateManager.state, "validity", {}), this.props.customValidityState);
+      _.get(this.ElementState.state, "validity", {}), this.props.customValidityState);
   }
 
   render() {
@@ -87,6 +85,7 @@ export default class ValidatedInput extends Component {
       min,
       max,
       step,
+      pattern,
       required,
       maxLength,
       label,
@@ -95,13 +94,17 @@ export default class ValidatedInput extends Component {
 
     const validityState = this._getValidityState();
     const errorMessagesMap = this._getErrorMessagesMap();
-    const errors = this.elementStateManager.state.dirty ?
+
+    const errors = this.ElementState.state.dirty ?
       (<Errors errorMessagesMap={errorMessagesMap} validityState={validityState}/>) : <div></div>;
+
+    var patternRegExp = new RegExp(pattern);
 
     return (
       <FormGroup>
         <Label>{label}</Label>
         <input
+          pattern={!!pattern ? patternRegExp: undefined}
           className={`form-control ${classes || ""}` }
           type={type}
           defaultValue={defaultValue}
@@ -122,6 +125,7 @@ export default class ValidatedInput extends Component {
 }
 
 ValidatedInput.defaultProps = {
+  pattern: "",
   required: false,
   debounce: Debounce,
   type: Type,
@@ -133,6 +137,7 @@ ValidatedInput.defaultProps = {
 };
 
 ValidatedInput.propTypes = {
+  pattern: PropTypes.string,
   classes: PropTypes.string,
   label: PropTypes.string.isRequired,
   required: PropTypes.bool,

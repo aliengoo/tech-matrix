@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // for use in container, each element should report to the state manager
-export default class ElementStatesManager {
+export default class ElementStateCollection {
   constructor() {
     this._elementStates = {areAllValid: false};
     this._areAllValid = this._areAllValid.bind(this);
@@ -16,6 +16,14 @@ export default class ElementStatesManager {
 
   get state() {
     return this._elementStates;
+  }
+
+  getValue(name) {
+    for(let elementState of this._elementStates) {
+      if (name === elementState.name) {
+        return elementState.value;
+      }
+    }
   }
 
   _areAllValid() {
