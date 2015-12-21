@@ -33,14 +33,19 @@ class ProductsView extends Component {
 
     return (
       <div className="container-fluid">
-        <div className="col-lg-12">
-          <header className="row">
+
+        <div className="row">
+          <header className="col-lg-3">
             <h1>Products</h1>
           </header>
-          <div className="col-lg-3 col-md-4">
+        </div>
+
+        <div className="row">
+          <div className="col-lg-2">
             <ProductsFilter onSearch={this.onSearch} fetching={fetching}/>
           </div>
-          <div className="col-lg-9 col-md-8">
+
+          <div className="col-lg-10">
             <ProductsTable fetching={fetching} products={products}/>
           </div>
         </div>

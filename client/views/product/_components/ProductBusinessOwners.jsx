@@ -4,16 +4,20 @@ import _ from 'lodash';
 import FormGroup from '../../_components/FormGroup.jsx';
 import Label from '../../_components/Label.jsx';
 import Select from 'react-select';
+import ElementState from '../../_common/ElementState';
 
 export default class ProductBusinessOwners extends Component {
 
   constructor(props) {
     super(props);
-    this.onChange = _.debounce(this.onChange, 1000).bind(this);
+    this._onChange = _.debounce(this._onChange, 1000).bind(this);
+    this.elementState = new ElementState();
+    this.componentName = this.constructor.name;
   }
 
-  onChange(rawValues) {
-    this.props.onChange(rawValues.split(','));
+  _onChange(rawValues) {
+    var arr = rawValues.split(',');
+    this.props._onChange();
   }
 
   render() {
@@ -24,10 +28,13 @@ export default class ProductBusinessOwners extends Component {
       <FormGroup>
         <Label>Business owners</Label>
         <Select
+          required={true}
+          name={this.componentName}
+          ref={this.componentName}
           multi={true}
           value={selectValue}
           delimiter={","}
-          onChange={this.onChange}
+          onChange={this._onChange}
           options={options}
           isLoading={fetching}/>
       </FormGroup>
@@ -44,5 +51,5 @@ ProductBusinessOwners.propTypes = {
   fetching: PropTypes.bool,
   options: PropTypes.array,
   value: PropTypes.array,
-  onChange: PropTypes.func.isRequired
+  onElementStateChange: PropTypes.func.isRequired
 };

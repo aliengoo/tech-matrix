@@ -8,12 +8,12 @@ let authenticationApi = new AuthenticationApi();
 
 class LoginActions {
 
-  setFormState(formState) {
-    this.dispatch(formState);
+  setElementState(elementState) {
+    this.dispatch(elementState);
   }
 
-  setField(field) {
-    this.dispatch(field);
+  reset() {
+    this.dispatch();
   }
 
   login(username, password) {
@@ -39,7 +39,12 @@ class LoginActions {
         }
 
       }).catch((result) => {
-        AppActions.failedAuthentication(result.error);
+        if (result.status === 401 || result.status === 403) {
+          AppActions.failedAuthentication("Invalid username or password");
+        } else {
+          console.error(result);
+          AppActions.failedAuthentication("There was a problem logging you in.  Contact an administrator.");
+        }
       });
   }
 }

@@ -9,7 +9,6 @@ export default class AuthenticationApi {
     let data = {
       username, password
     };
-    console.log(data);
 
     return axios.post(`/api/authenticate`, data);
   }

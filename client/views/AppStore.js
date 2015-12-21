@@ -1,16 +1,21 @@
 import alt from '../alt';
 import AppActions from './AppActions';
 
+const DefaultState = {
+  username: "",
+  isAuthenticated: false,
+  fetching: false,
+  error: null
+};
+
 class AppStore {
   constructor() {
     this.bindActions(AppActions);
+    this.state = Object.assign({}, DefaultState);
+  }
 
-    this.state = {
-      username: "",
-      isAuthenticated: false,
-      fetching: false,
-      error: null
-    };
+  onReset() {
+    this.setState(Object.assign({}, DefaultState));
   }
 
   onSetError(error) {

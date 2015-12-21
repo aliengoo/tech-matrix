@@ -41,8 +41,7 @@ export default class FormGroupInput extends Component {
   }
 
   _onChange() {
-    this.props.elementStateChanged(
-      this.elementState.evaluate(this.input));
+    this.elementState.evaluate(this.input).then(this.props.elementStateChanged);
   }
 
   _getErrorMessagesMap() {

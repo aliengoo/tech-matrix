@@ -19,7 +19,7 @@ class ProductsStore {
       vendorNames: [],
       error: null,
       fetching: false,
-      filter: ""
+      filter: undefined
     };
   }
 

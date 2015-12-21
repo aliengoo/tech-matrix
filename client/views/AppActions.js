@@ -3,11 +3,13 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import AuthenticationApi from '../common/AuthenticationApi';
+const authenticationApi = new AuthenticationApi();
 
 class AppActions {
 
-  constructor() {
-    this.authenticationApi = new AuthenticationApi();
+  reset() {
+    authenticationApi.setToken();
+    this.dispatch();
   }
 
   fetchStarted() {
@@ -37,7 +39,7 @@ class AppActions {
   logoutUser() {
     this.dispatch();
 
-    this.authenticationApi.setToken();
+    authenticationApi.setToken();
 
     axios.post('/api/auth/logout')
       .then(this.actions.loggedOut)

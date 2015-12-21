@@ -1,19 +1,44 @@
+import _ from 'lodash';
+
 import React, {Component, PropTypes} from 'react';
 export default class ErrorPanel extends Component {
+
+  constructor(props) {
+    super(props);
+    this.componentName = this.constructor.name;
+    this.hash = undefined;
+  }
+
   render() {
 
-    const {error} = this.props;
+    const {error, hash} = this.props;
+
+    if (!error || (this.hash !== undefined && hash !== this.hash)) {
+      return <div></div>;
+    }
+
+    let content;
+
+    if (_.isString(error)) {
+      content = error;
+    } else {
+      content = JSON.stringify(error);
+    }
+
+    this.hash = hash;
 
     return (
-      <div className="panel panel-danger">
-        <div className="page-body">
-          {JSON.stringify(error)}
-        </div>
+      <div className={`${this.componentName} alert alert-danger`} role="alert">
+        {content}
       </div>
     );
   }
 }
 
 ErrorPanel.propTypes = {
-  error: PropTypes.object
+  hash: PropTypes.string,
+  error: PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.object
+  ])
 };

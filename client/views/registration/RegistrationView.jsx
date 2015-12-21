@@ -64,7 +64,7 @@ export default class RegistrationView extends Component {
   render() {
     const {username, password, fetching, exists, states, error} = this.props;
 
-    const disabled = exists || fetching || !states.areAllValid;
+    const disabled = exists || fetching || !states.state.areAllValid;
 
     return (
       <div className="container">
@@ -94,13 +94,10 @@ export default class RegistrationView extends Component {
 
             <FormGroupInput
               elementStateChanged={this.elementStateChanged}
-              pattern={/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/}
+              title="A password must be at least 8 characters in length, and contain number(s), letter(s) and special chars"
               defaultValue={password}
               required={true}
-              minLength={3}
-              errorMessagesMap={{
-                patternMismatch: "Password does not meet the minimum requirement"
-              }}
+              minLength={8}
               name="password"
               label="Password"
               type="password"/>

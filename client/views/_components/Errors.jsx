@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import ErrorMessage from './ErrorMessage.jsx';
+import ReactCSSTransitionGroup  from 'react-addons-css-transition-group';
 
 export default class Errors extends Component {
 
@@ -19,9 +20,16 @@ export default class Errors extends Component {
 
     return (
       <div className="Errors">
-        {errorMessages.map((errorMessage, i) => {
-          return <ErrorMessage key={i}>{errorMessage}</ErrorMessage>
-        })}
+        <ReactCSSTransitionGroup
+          transitionName="errors"
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          {errorMessages.map((errorMessage, i) => {
+            return <ErrorMessage key={i}>{errorMessage}</ErrorMessage>
+          })}
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
@@ -35,7 +43,7 @@ export default class Errors extends Component {
       return errorMessages;
     }
 
-    for(var key in validityState) {
+    for (var key in validityState) {
       if (validityState[key] === true && errorMessagesMap.hasOwnProperty(key)) {
         errorMessages.push(errorMessagesMap[key]);
       }

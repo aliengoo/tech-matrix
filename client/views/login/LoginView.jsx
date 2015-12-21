@@ -3,16 +3,18 @@ import connectToStores from 'alt/utils/connectToStores';
 import React, {Component, PropTypes} from 'react';
 import Form from '../_components/Form.jsx';
 import FormGroupInput from '../_components/FormGroupInput.jsx'
+import AppActions from '../AppActions';
 import AppStore from '../AppStore';
 import LoginStore from './LoginStore';
 import LoginActions from './LoginActions';
 import NotRegisteredYet from './_components/NotRegisteredYet.jsx';
+import ErrorPanel from '../_components/ErrorPanel.jsx';
 
 export default class LoginView extends Component {
 
   constructor(props) {
     super(props);
-    this.setField = _.debounce(this.setField, 500).bind(this);
+    this.elementStateChanged = this.elementStateChanged.bind(this);
   }
 
   static getStores() {
@@ -26,19 +28,29 @@ export default class LoginView extends Component {
       LoginStore.getState());
   }
 
-  setField(field) {
-    LoginActions.setField(field);
-  }
-
   componentDidMount() {
+    LoginActions.reset();
+    AppActions.reset();
     let self = this;
     self.appStoreListener = AppStore.listen((state) => {
       if (state.isAuthenticated) {
         setTimeout(() => {
-          self.props.history.pushState(null, 'products');
+          // componentWillUnmount doesn't work, so wait for store update, then reset
+          LoginActions.reset();
+          // clear the current state before moving on
+          console.info("Authenticated - transitioning");
+          self.props.history.pushState(null, 'auth/products');
         }, 1);
       }
     });
+  }
+
+  elementStateChanged(elementState) {
+    if (!elementState) {
+      return;
+    }
+
+    LoginActions.setElementState(elementState);
   }
 
   componentWillUnmount() {
@@ -46,7 +58,9 @@ export default class LoginView extends Component {
   }
 
   render() {
-    const {username, password, fetching, formState, history} = this.props;
+    const {username, password, fetching, states, error} = this.props;
+
+    const disabled = fetching || !states.state.areAllValid;
 
     return (
       <div className="container">
@@ -54,12 +68,32 @@ export default class LoginView extends Component {
           <header>
             <h1>Login</h1>
           </header>
-          <Form name="loginForm" onFormStateUpdated={formState => LoginActions.setFormState(formState)}>
+          <Form name="loginForm">
+            <FormGroupInput
+              elementStateChanged={this.elementStateChanged}
+              defaultValue={username}
+              required={true}
+              minLength={3}
+              ref="username"
+              name="username"
+              label="Username"
+              placeholder="e.g. fred@blogs.net"
+              type="email"/>
 
+            <FormGroupInput
+              elementStateChanged={this.elementStateChanged}
+              defaultValue={password}
+              ref="password"
+              required={true}
+              minLength={8}
+              name="password"
+              label="Password"
+              type="password"/>
+            <ErrorPanel error={error} hash={username + password}/>
             <button
               className="btn btn-primary btn pull-right"
               type="button"
-              disabled={fetching || !formState.valid}
+              disabled={disabled}
               onClick={() => LoginActions.login(username, password)}>Login
             </button>
             <div className="clearfix"></div>
